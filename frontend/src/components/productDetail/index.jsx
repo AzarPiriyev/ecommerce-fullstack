@@ -16,7 +16,8 @@ const ProductDetail = () => {
 
              <div className='md:px-[30px] md:py-[17px] md:min-w-[350px] lg:min-w-[500px] xl:min-w-[700px]'>
                 <h1 className='text-[34px] text-[#2f2f2f] font-bold'>Dağınık Zihinler</h1>
-                <p className='text-[14px] font-medium text-[#ff5100] mb-[30px]'>Gabor Mate</p>
+                <p className='text-[14px] font-medium text-[#ff5100] mb-[20px]'>Gabor Mate</p>
+                <p className='text-[16px] font-medium text-[#2f2f2f] mb-[30px]'>Psychology</p>
                 <div className='mb-[30px] md:flex md:justify-between'>
                     <p className='text-[30px] font-semibold text-[#2f2f2f] text-center mb-[20px]'>$20</p>
                     <div>

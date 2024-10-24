@@ -17,36 +17,6 @@ const Products = () => {
                 <GrBasket className='text-[#ff5100] mt-[4px]' />
               </div>
             </div>
-            <div className=''>
-              <img src="/src/assets/images/new.jpeg" alt="product" className='rounded-[8px] mb-[15px]' />
-              <p className='text-[18px] text-[#333333] font-medium'>Hilkat Garibeleri</p>
-              <p className='text-[#c9cccc] text-[14px] font-normal'>Serdar Uslu</p>
-              <p className='text-[#2f2f2f] text-[16px] font-medium mb-[10px]'>$10</p>
-              <div className='flex gap-[10px]'>
-                <p className='text-[16px] text-[#ff5100] font-bold'>Add to Cart</p>
-                <GrBasket className='text-[#ff5100] mt-[4px]' />
-              </div>
-            </div>
-            <div className=''>
-              <img src="/src/assets/images/new.jpeg" alt="product" className='rounded-[8px] mb-[15px]' />
-              <p className='text-[18px] text-[#333333] font-medium'>Hilkat Garibeleri</p>
-              <p className='text-[#c9cccc] text-[14px] font-normal'>Serdar Uslu</p>
-              <p className='text-[#2f2f2f] text-[16px] font-medium mb-[10px]'>$10</p>
-              <div className='flex gap-[10px]'>
-                <p className='text-[16px] text-[#ff5100] font-bold'>Add to Cart</p>
-                <GrBasket className='text-[#ff5100] mt-[4px]' />
-              </div>
-            </div>
-            <div className=''>
-              <img src="/src/assets/images/new.jpeg" alt="product" className='rounded-[8px] mb-[15px]' />
-              <p className='text-[18px] text-[#333333] font-medium'>Hilkat Garibeleri</p>
-              <p className='text-[#c9cccc] text-[14px] font-normal'>Serdar Uslu</p>
-              <p className='text-[#2f2f2f] text-[16px] font-medium mb-[10px]'>$10</p>
-              <div className='flex gap-[10px]'>
-                <p className='text-[16px] text-[#ff5100] font-bold'>Add to Cart</p>
-                <GrBasket className='text-[#ff5100] mt-[4px]' />
-              </div>
-            </div>
 
         </div>
 

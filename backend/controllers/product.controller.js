@@ -25,10 +25,11 @@ export const getProductById = async (req, res) => {
 
 // Yeni ürün ekleme
 export const createProduct = async (req, res) => {
-  const { name, price, description, category, rating, imageUrl } = req.body;
+  const { name, writer, price, description, category, rating, imageUrl } = req.body;
 
   const newProduct = new Product({
     name,
+    writer,
     price,
     description,
     category,

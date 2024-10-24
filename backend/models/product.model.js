@@ -6,6 +6,12 @@ const productSchema = new mongoose.Schema({
     required: true,
     trim: true,
   },
+
+  writer: {
+    type: String,
+    required: true,
+    trim: true,
+  },
   
   price: {
     type: Number,

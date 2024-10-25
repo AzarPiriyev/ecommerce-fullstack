@@ -3,6 +3,7 @@ import { FaCartShopping } from "react-icons/fa6";
 import { FaUser } from "react-icons/fa";
 import { IoCall } from "react-icons/io5";
 import { MdQuestionAnswer } from "react-icons/md";
+import { Link } from 'react-router-dom';
 
 const Navigation = () => {
   return (
@@ -16,22 +17,22 @@ const Navigation = () => {
         {/* Navigation Items */}
         <nav className='flex flex-col space-y-6'>
           {/* Products */}
-          <div className='flex items-center gap-3 hover:bg-gray-700 p-2 rounded-md cursor-pointer'>
+          <Link to={'/admin'}><div className='flex items-center gap-3 hover:bg-gray-700 p-2 rounded-md cursor-pointer'>
             <FaCartShopping className='text-[24px]' />
             <p className='text-[18px] font-medium'>Products</p>
-          </div>
+          </div></Link>
 
           {/* Users */}
-          <div className='flex items-center gap-3 hover:bg-gray-700 p-2 rounded-md cursor-pointer'>
+          <Link to={'/admin/users'}><div className='flex items-center gap-3 hover:bg-gray-700 p-2 rounded-md cursor-pointer'>
             <FaUser className='text-[24px]' />
             <p className='text-[18px] font-medium'>Users</p>
-          </div>
+          </div></Link>
 
           {/* Contacts */}
-          <div className='flex items-center gap-3 hover:bg-gray-700 p-2 rounded-md cursor-pointer'>
+          <Link to={'/admin/contacts'}><div className='flex items-center gap-3 hover:bg-gray-700 p-2 rounded-md cursor-pointer'>
             <IoCall className='text-[24px]' />
             <p className='text-[18px] font-medium'>Contacts</p>
-          </div>
+          </div></Link>
 
           {/* FAQ */}
           <div className='flex items-center gap-3 hover:bg-gray-700 p-2 rounded-md cursor-pointer'>

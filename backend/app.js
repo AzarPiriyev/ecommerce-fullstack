@@ -12,6 +12,14 @@ import categoryRoutes from './routes/category.routes.js';
 
 const server = express();  // `server` olarak adlandırılmış
 
+server.use(
+  cors({
+    origin: ["http://localhost:5173"],
+    methods: ["GET", "POST", "PUT", "DELETE", "PATCH"],
+    allowedHeaders: ["Content-Type", "Authorization"],
+  })
+)
+
 dotenv.config();
 
 server.use(express.json());  // JSON middleware

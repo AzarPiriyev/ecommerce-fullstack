@@ -1,11 +1,27 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
+import axios from 'axios';
 import Navigation from '../navigation';
 import AddProducts from '../addProducts';
-import EditProducts from '../editProducts'; // Import EditProducts component
+import EditProducts from '../editProducts';
 
 const ProductsAdmin = () => {
-  const [isAddModalOpen, setIsAddModalOpen] = useState(false); // Add product modal
-  const [isEditModalOpen, setIsEditModalOpen] = useState(false); // Edit product modal
+  const [products, setProducts] = useState([]);
+  const [isAddModalOpen, setIsAddModalOpen] = useState(false);
+  const [isEditModalOpen, setIsEditModalOpen] = useState(false);
+  const [selectedProduct, setSelectedProduct] = useState(null);
+
+  // Fetch products from backend API
+  useEffect(() => {
+    const fetchProducts = async () => {
+      try {
+        const response = await axios.get('http://localhost:3000/api/products');
+        setProducts(response.data);
+      } catch (error) {
+        console.error('Error fetching products:', error);
+      }
+    };
+    fetchProducts();
+  }, []);
 
   // Handlers for Add Product modal
   const handleOpenAddModal = () => {
@@ -16,11 +32,33 @@ const ProductsAdmin = () => {
   };
 
   // Handlers for Edit Product modal
-  const handleOpenEditModal = () => {
+  const handleOpenEditModal = (product) => {
+    setSelectedProduct(product);
     setIsEditModalOpen(true);
   };
   const handleCloseEditModal = () => {
     setIsEditModalOpen(false);
+    setSelectedProduct(null);
+  };
+
+  // Update products after adding/editing
+  const handleUpdateProducts = async () => {
+    try {
+      const response = await axios.get('http://localhost:3000/api/products');
+      setProducts(response.data);
+    } catch (error) {
+      console.error('Error updating products:', error);
+    }
+  };
+
+  // Delete a product
+  const handleDeleteProduct = async (productId) => {
+    try {
+      await axios.delete(`http://localhost:3000/api/products/${productId}`);
+      handleUpdateProducts(); // Update products list after deletion
+    } catch (error) {
+      console.error('Error deleting product:', error);
+    }
   };
 
   return (
@@ -36,7 +74,7 @@ const ProductsAdmin = () => {
         <div className='flex justify-between items-center mb-8'>
           <h2 className='text-3xl font-semibold text-gray-800'>Products</h2>
           <button
-            onClick={handleOpenAddModal} // Open Add Product modal
+            onClick={handleOpenAddModal}
             className='bg-blue-600 text-white py-2 px-4 rounded-md hover:bg-blue-700 transition duration-300 shadow-lg'>
             Add Product
           </button>
@@ -57,44 +95,52 @@ const ProductsAdmin = () => {
               </tr>
             </thead>
             <tbody className="text-gray-600 text-sm font-light">
-              {/* Sample Row */}
-              <tr className="border-b border-gray-200 hover:bg-gray-100">
-                <td className="py-3 px-6 text-left">Product 1</td>
-                <td className="py-3 px-6 text-left">Name</td>
-                <td className="py-3 px-6 text-left">$100</td>
-                <td className="py-3 px-6 text-left">Category 1</td>
-                <td className="py-3 px-6 text-left">
-                  <img
-                    src="https://via.placeholder.com/50"
-                    alt="Product 1"
-                    className="w-12 h-12 object-cover rounded-md shadow-sm" />
-                </td>
-                <td className="py-3 px-6 text-left">4.5</td>
-                <td className="py-3 px-6 text-left">
-                  <div className="flex gap-2">
-                    {/* Edit Button */}
-                    <button
-                      onClick={handleOpenEditModal} // Open Edit Product modal
-                      className='bg-yellow-400 text-white py-1 px-3 rounded-md hover:bg-yellow-500 transition duration-300 shadow-md'>
-                      Edit
-                    </button>
-                    <button className='bg-red-600 text-white py-1 px-3 rounded-md hover:bg-red-700 transition duration-300 shadow-md'>
-                      Delete
-                    </button>
-                  </div>
-                </td>
-              </tr>
-              {/* More rows can be added similarly */}
+              {products.map((product) => (
+                <tr key={product._id} className="border-b border-gray-200 hover:bg-gray-100">
+                  <td className="py-3 px-6 text-left">{product.name}</td>
+                  <td className="py-3 px-6 text-left">{product.writer}</td>
+                  <td className="py-3 px-6 text-left">${product.price}</td>
+                  <td className="py-3 px-6 text-left">{product.category}</td>
+                  <td className="py-3 px-6 text-left">
+                    <img
+                      src={product.imageUrl}
+                      alt={product.name}
+                      className="w-12 h-12 object-cover rounded-md shadow-sm"
+                    />
+                  </td>
+                  <td className="py-3 px-6 text-left">{product.rating}</td>
+                  <td className="py-3 px-6 text-left">
+                    <div className="flex gap-2">
+                      <button
+                        onClick={() => handleOpenEditModal(product)}
+                        className='bg-yellow-400 text-white py-1 px-3 rounded-md hover:bg-yellow-500 transition duration-300 shadow-md'>
+                        Edit
+                      </button>
+                      <button
+                        onClick={() => handleDeleteProduct(product._id)}
+                        className='bg-red-600 text-white py-1 px-3 rounded-md hover:bg-red-700 transition duration-300 shadow-md'>
+                        Delete
+                      </button>
+                    </div>
+                  </td>
+                </tr>
+              ))}
             </tbody>
           </table>
         </div>
       </div>
 
       {/* AddProducts Modal */}
-      {isAddModalOpen && <AddProducts onClose={handleCloseAddModal} />} {/* Show AddProducts modal */}
+      {isAddModalOpen && <AddProducts onClose={handleCloseAddModal} onUpdate={handleUpdateProducts} />}
 
       {/* EditProducts Modal */}
-      {isEditModalOpen && <EditProducts onClose={handleCloseEditModal} />} {/* Show EditProducts modal */}
+      {isEditModalOpen && selectedProduct && (
+        <EditProducts
+          product={selectedProduct}
+          onClose={handleCloseEditModal}
+          onUpdate={handleUpdateProducts}
+        />
+      )}
     </div>
   );
 };

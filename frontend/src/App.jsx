@@ -11,16 +11,20 @@ import WishlistPage from './pages/wishlistPage';
 import ProductsPage from './admin/pages/productsPage';
 import { useLocation } from 'react-router-dom';
 import CategoriesPage from './pages/categoriesPage';
+import UsersPage from './admin/pages/usersPage';
+import ContactsPage from './admin/pages/contactsPage';
 
 
 function App() {
   const location = useLocation();
 
   const isProductsPage = location.pathname === '/admin';
+  const isUsersPage = location.pathname === '/admin/users';
+  const isContactsPage = location.pathname === '/admin/contacts';
 
   return (
     <>
-    {!isProductsPage && <Header />}
+    {!isProductsPage && !isUsersPage && !isContactsPage && <Header />}
       <Routes>
     <Route path="/" element={<HomePage />} />
     <Route path="/new" element={<NewPage />} />
@@ -30,8 +34,10 @@ function App() {
     <Route path="/categories" element={<CategoriesPage />} />
     {/* Admin Panel */}
     <Route path="/admin" element={<ProductsPage />} />
+    <Route path="/admin/users" element={<UsersPage/>} />
+    <Route path="/admin/contacts" element={<ContactsPage/>} />
       </Routes>
-      {!isProductsPage && <Footer />}
+      {!isProductsPage && !isUsersPage && !isContactsPage && <Footer />}
     </>
   )
 }

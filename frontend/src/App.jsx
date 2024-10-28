@@ -16,6 +16,7 @@ import ContactsPage from './admin/pages/contactsPage';
 import FaqAdmin from './admin/pages/faqPages';
 import CategoriesAdmin from './admin/pages/categoriesPage';
 import ContactPage from './pages/contactPage';
+import InformPage from './admin/pages/informPage';
 
 
 function App() {
@@ -26,10 +27,11 @@ function App() {
   const isContactsPage = location.pathname === '/admin/contacts';
   const isFaqAdmin = location.pathname === '/admin/faq';
   const isCategoriesAdmin = location.pathname === '/admin/categories';
+  const isInformPage = location.pathname === '/admin/informs';
 
   return (
     <>
-    {!isProductsPage && !isUsersPage && !isContactsPage && !isFaqAdmin && !isCategoriesAdmin && <Header />}
+    {!isProductsPage && !isUsersPage && !isContactsPage && !isFaqAdmin && !isCategoriesAdmin && !isInformPage && <Header />}
       <Routes>
     <Route path="/" element={<HomePage />} />
     <Route path="/new" element={<NewPage />} />
@@ -44,8 +46,9 @@ function App() {
     <Route path="/admin/contacts" element={<ContactsPage/>} />
     <Route path="/admin/faq" element={<FaqAdmin/>} />
     <Route path="/admin/categories" element={<CategoriesAdmin/>} />
+    <Route path="/admin/informs" element={<InformPage/>} />
       </Routes>
-      {!isProductsPage && !isUsersPage && !isContactsPage && !isFaqAdmin && !isCategoriesAdmin && <Footer />}
+      {!isProductsPage && !isUsersPage && !isContactsPage && !isFaqAdmin && !isCategoriesAdmin && !isInformPage && <Footer />}
     </>
   )
 }

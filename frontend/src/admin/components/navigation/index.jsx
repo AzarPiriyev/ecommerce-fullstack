@@ -5,6 +5,7 @@ import { IoCall } from "react-icons/io5";
 import { MdQuestionAnswer } from "react-icons/md";
 import { Link } from 'react-router-dom';
 import { BiSolidCategory } from "react-icons/bi";
+import { IoIosInformationCircle } from "react-icons/io";
 
 const Navigation = () => {
   return (
@@ -45,6 +46,12 @@ const Navigation = () => {
           <Link to={'/admin/faq'}><div className='flex items-center gap-3 hover:bg-gray-700 p-2 rounded-md cursor-pointer'>
             <MdQuestionAnswer className='text-[24px]' />
             <p className='text-[18px] font-medium'>FAQ</p>
+          </div></Link>
+
+          {/* Inform */}
+          <Link to={'/admin/informs'}><div className='flex items-center gap-3 hover:bg-gray-700 p-2 rounded-md cursor-pointer'>
+            <IoIosInformationCircle className='text-[24px]' />
+            <p className='text-[18px] font-medium'>Informs</p>
           </div></Link>
         </nav>
       </div>

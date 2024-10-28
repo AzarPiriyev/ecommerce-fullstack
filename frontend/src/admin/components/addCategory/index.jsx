@@ -4,7 +4,30 @@ import axios from 'axios';
 const AddCategory = ({ toggleModal, onAdd }) => {
   const [name, setName] = useState('');
   const [imageUrl, setImageUrl] = useState('');
+  const [file, setFile] = useState(null);
+  const [preview, setPreview] = useState(null);
   const [isLoading, setIsLoading] = useState(false);
+
+  const handleFileChange = async (e) => {
+    const selectedFile = e.target.files[0];
+    setFile(selectedFile);
+    setPreview(URL.createObjectURL(selectedFile));
+
+    // Upload to Cloudinary
+    const formData = new FormData();
+    formData.append('file', selectedFile);
+    formData.append('upload_preset', 'qslbztwu'); // Replace with your Cloudinary preset
+
+    try {
+      const res = await axios.post(
+        'https://api.cloudinary.com/v1_1/dfdds09gi/image/upload', // Replace with your Cloudinary cloud name
+        formData
+      );
+      setImageUrl(res.data.secure_url); // Store the uploaded image URL
+    } catch (error) {
+      console.error('Error uploading image:', error);
+    }
+  };
 
   const handleSave = async (e) => {
     e.preventDefault();
@@ -13,11 +36,9 @@ const AddCategory = ({ toggleModal, onAdd }) => {
     const newCategory = { name, imageUrl };
 
     try {
-      // Send a POST request to the backend
       const response = await axios.post('http://localhost:3000/api/categories', newCategory);
-      console.log('Added Category:', response.data); // Log the response from the server
-      onAdd(response.data); // Callback to update the categories list with the new data
-      toggleModal(); // Close the modal
+      onAdd(response.data);
+      toggleModal();
     } catch (error) {
       console.error('Error adding category:', error);
     } finally {
@@ -45,17 +66,21 @@ const AddCategory = ({ toggleModal, onAdd }) => {
           </div>
           <div className="mb-4">
             <label className="block text-gray-700 text-sm font-semibold mb-2" htmlFor="imageUrl">
-              Image URL
+              Upload Image
             </label>
             <input
-              type="text"
+              type="file"
               id="imageUrl"
-              value={imageUrl}
-              onChange={(e) => setImageUrl(e.target.value)}
+              onChange={handleFileChange}
               className="w-full px-3 py-2 border rounded-md focus:outline-none focus:ring focus:ring-blue-200"
               required
             />
           </div>
+          {preview && (
+            <div className="mb-4">
+              <img src={preview} alt="Selected Preview" className="w-full h-auto rounded-md" />
+            </div>
+          )}
           <div className="flex justify-end gap-2">
             <button
               type="button"

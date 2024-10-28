@@ -4,6 +4,7 @@ import { FaUser } from "react-icons/fa";
 import { IoCall } from "react-icons/io5";
 import { MdQuestionAnswer } from "react-icons/md";
 import { Link } from 'react-router-dom';
+import { BiSolidCategory } from "react-icons/bi";
 
 const Navigation = () => {
   return (
@@ -22,6 +23,12 @@ const Navigation = () => {
             <p className='text-[18px] font-medium'>Products</p>
           </div></Link>
 
+           {/* Categories */}
+           <Link to={'/admin/categories'}><div className='flex items-center gap-3 hover:bg-gray-700 p-2 rounded-md cursor-pointer'>
+            <BiSolidCategory className='text-[24px]' />
+            <p className='text-[18px] font-medium'>Categories</p>
+          </div></Link>
+
           {/* Users */}
           <Link to={'/admin/users'}><div className='flex items-center gap-3 hover:bg-gray-700 p-2 rounded-md cursor-pointer'>
             <FaUser className='text-[24px]' />
@@ -35,10 +42,10 @@ const Navigation = () => {
           </div></Link>
 
           {/* FAQ */}
-          <div className='flex items-center gap-3 hover:bg-gray-700 p-2 rounded-md cursor-pointer'>
+          <Link to={'/admin/faq'}><div className='flex items-center gap-3 hover:bg-gray-700 p-2 rounded-md cursor-pointer'>
             <MdQuestionAnswer className='text-[24px]' />
             <p className='text-[18px] font-medium'>FAQ</p>
-          </div>
+          </div></Link>
         </nav>
       </div>
     </div>

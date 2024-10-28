@@ -1,27 +1,27 @@
 import express from 'express';
 import {
+  createCategory,
   getCategories,
   getCategoryById,
-  createCategory,
   updateCategory,
-  deleteCategory,
+  deleteCategory
 } from '../controllers/category.controller.js';
 
 const router = express.Router();
 
-// GET: Tüm kategorileri getir
-router.get('/', getCategories);
-
-// GET: Tek bir kategoriyi getir (ID ile)
-router.get('/:id', getCategoryById);
-
-// POST: Yeni kategori ekle
+// POST: Create a new category
 router.post('/', createCategory);
 
-// PUT: Var olan kategoriyi güncelle (ID ile)
+// GET: Get all categories
+router.get('/', getCategories);
+
+// GET: Get a single category by ID
+router.get('/:id', getCategoryById);
+
+// PUT: Update a category by ID
 router.put('/:id', updateCategory);
 
-// DELETE: Kategoriyi sil (ID ile)
+// DELETE: Delete a category by ID
 router.delete('/:id', deleteCategory);
 
 export default router;

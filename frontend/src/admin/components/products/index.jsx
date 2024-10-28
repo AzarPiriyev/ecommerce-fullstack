@@ -75,7 +75,7 @@ const ProductsAdmin = () => {
           <h2 className='text-3xl font-semibold text-gray-800'>Products</h2>
           <button
             onClick={handleOpenAddModal}
-            className='bg-blue-600 text-white py-2 px-4 rounded-md hover:bg-blue-700 transition duration-300 shadow-lg'>
+            className='bg-green-500 text-white py-2 px-4 rounded-md hover:bg-green-600 transition duration-300 shadow-lg'>
             Add Product
           </button>
         </div>

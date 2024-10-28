@@ -13,6 +13,9 @@ import { useLocation } from 'react-router-dom';
 import CategoriesPage from './pages/categoriesPage';
 import UsersPage from './admin/pages/usersPage';
 import ContactsPage from './admin/pages/contactsPage';
+import FaqAdmin from './admin/pages/faqPages';
+import CategoriesAdmin from './admin/pages/categoriesPage';
+import ContactPage from './pages/contactPage';
 
 
 function App() {
@@ -21,10 +24,12 @@ function App() {
   const isProductsPage = location.pathname === '/admin';
   const isUsersPage = location.pathname === '/admin/users';
   const isContactsPage = location.pathname === '/admin/contacts';
+  const isFaqAdmin = location.pathname === '/admin/faq';
+  const isCategoriesAdmin = location.pathname === '/admin/categories';
 
   return (
     <>
-    {!isProductsPage && !isUsersPage && !isContactsPage && <Header />}
+    {!isProductsPage && !isUsersPage && !isContactsPage && !isFaqAdmin && !isCategoriesAdmin && <Header />}
       <Routes>
     <Route path="/" element={<HomePage />} />
     <Route path="/new" element={<NewPage />} />
@@ -32,12 +37,15 @@ function App() {
     <Route path="/cart" element={<CartPage />} />
     <Route path="/library" element={<WishlistPage />} />
     <Route path="/categories" element={<CategoriesPage />} />
+    <Route path="/contact" element={<ContactPage />} />
     {/* Admin Panel */}
     <Route path="/admin" element={<ProductsPage />} />
     <Route path="/admin/users" element={<UsersPage/>} />
     <Route path="/admin/contacts" element={<ContactsPage/>} />
+    <Route path="/admin/faq" element={<FaqAdmin/>} />
+    <Route path="/admin/categories" element={<CategoriesAdmin/>} />
       </Routes>
-      {!isProductsPage && !isUsersPage && !isContactsPage && <Footer />}
+      {!isProductsPage && !isUsersPage && !isContactsPage && !isFaqAdmin && !isCategoriesAdmin && <Footer />}
     </>
   )
 }

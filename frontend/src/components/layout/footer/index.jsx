@@ -7,7 +7,7 @@ import { FaInstagramSquare } from "react-icons/fa";
 const Footer = () => {
     const homeElements =[
         {title: "Home", href: "/"},
-        {title: "Contact", href: "/"},
+        {title: "Contact", href: "/contact"},
       ]
 
     const helpElements =[

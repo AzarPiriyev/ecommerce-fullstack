@@ -11,8 +11,8 @@ const Header = () => {
     const [isSidebarOpen, setIsSidebarOpen] = useState(false); // Hamburger menü durumu
 
     const navElements = [
-        { title: "NEW", href: "/new" },
-        { title: "TOP SELLINGS", href: "/" },
+        { title: "NEW", href: "/products/new" },
+        { title: "TOP SELLINGS", href: "/products/top-sellings" },
         { title: "CATEGORIES", href: "/categories" },
     ];
 

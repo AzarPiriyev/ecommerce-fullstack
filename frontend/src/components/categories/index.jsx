@@ -1,14 +1,25 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import Container from '../common/container';
 
 const Categories = () => {
-  const categories = [
-    { name: 'History', image: 'history.png' },
-    { name: 'Literature', image: 'literature.jpg' },
-    { name: 'Economy', image: 'economy.jpg' },
-    { name: 'Psychology', image: 'Psychology.jpg' },
-    { name: "Children's Books", image: 'children.png' },
-  ];
+  const [categories, setCategories] = useState([]);
+
+  useEffect(() => {
+    const fetchCategories = async () => {
+      try {
+        const response = await fetch('http://localhost:3000/api/categories');
+        if (!response.ok) {
+          throw new Error('Network response was not ok');
+        }
+        const data = await response.json();
+        setCategories(data);
+      } catch (error) {
+        console.error('Error fetching categories:', error);
+      }
+    };
+
+    fetchCategories();
+  }, []);
 
   return (
     <Container>
@@ -21,7 +32,7 @@ const Categories = () => {
         {categories.map((category, index) => (
           <div key={index} className="bg-white shadow-md rounded-lg overflow-hidden transform hover:scale-105 transition-transform duration-300">
             <img
-              src={`/src/assets/images/${category.image}`}
+              src={category.imageUrl} // Adjust the image source based on your API response
               alt={category.name}
               className="h-40 w-full object-cover"
             />

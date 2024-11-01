@@ -2,10 +2,25 @@ import Product from '../models/product.model.js';
 
 // Tüm ürünleri listeleme
 export const getProducts = async (req, res) => {
+  const { writer, price, category } = req.query;
+
+  const filter = {};
+
+  // Добавление фильтров
+  if (category) filter.category = category;
+  if (writer) filter.writer = writer;
+  if (price) {
+    const priceNum = Number(price);
+    if (!isNaN(priceNum)) {
+      filter.price = { $lte: priceNum }; // Пример: фильтр по цене меньше или равно
+    }
+  }
+
   try {
-    const products = await Product.find();
+    const products = await Product.find(filter);
     res.status(200).json(products);
   } catch (error) {
+    console.error('Database query error:', error); // Логирование ошибки
     res.status(500).json({ message: error.message });
   }
 };
@@ -25,7 +40,7 @@ export const getProductById = async (req, res) => {
 
 // Yeni ürün ekleme
 export const createProduct = async (req, res) => {
-  const { name, writer, price, description, category, rating, imageUrl } = req.body;
+  const { name, writer, price, description, category, rating, imageUrl, newArrival, topSelling } = req.body;
 
   const newProduct = new Product({
     name,
@@ -35,6 +50,8 @@ export const createProduct = async (req, res) => {
     category,
     rating,
     imageUrl,
+    newArrival,
+    topSelling,
   });
 
   try {

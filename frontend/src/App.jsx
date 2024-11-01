@@ -17,6 +17,7 @@ import FaqAdmin from './admin/pages/faqPages';
 import CategoriesAdmin from './admin/pages/categoriesPage';
 import ContactPage from './pages/contactPage';
 import InformPage from './admin/pages/informPage';
+import TopPages from './pages/topPages';
 
 
 function App() {
@@ -34,8 +35,9 @@ function App() {
     {!isProductsPage && !isUsersPage && !isContactsPage && !isFaqAdmin && !isCategoriesAdmin && !isInformPage && <Header />}
       <Routes>
     <Route path="/" element={<HomePage />} />
-    <Route path="/new" element={<NewPage />} />
-    <Route path="/product" element={<ProductDetailPage />} />
+    <Route path="/products/new" element={<NewPage />} />
+    <Route path="/products/top-sellings" element={<TopPages />} />
+    <Route path="/product/:id" element={<ProductDetailPage />} />
     <Route path="/cart" element={<CartPage />} />
     <Route path="/library" element={<WishlistPage />} />
     <Route path="/categories" element={<CategoriesPage />} />

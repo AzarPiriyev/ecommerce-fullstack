@@ -39,7 +39,19 @@ const productSchema = new mongoose.Schema({
    imageUrl:{
     type: String,
     required: true,
-   }
+   },
+   
+   newArrival: {
+    type: Boolean,
+    required: true,
+    default: false,
+  },
+
+  topSelling: {
+    type: Boolean,
+    required: true,
+    default: false,
+  }
 });
 
 export default mongoose.model("Product", productSchema);

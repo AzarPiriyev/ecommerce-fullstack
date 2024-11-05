@@ -1,29 +1,6 @@
 import Product from '../models/product.model.js';
 
-// Tüm ürünleri listeleme
-export const getProducts = async (req, res) => {
-  const { writer, price, category } = req.query;
 
-  const filter = {};
-
-  // Добавление фильтров
-  if (category) filter.category = category;
-  if (writer) filter.writer = writer;
-  if (price) {
-    const priceNum = Number(price);
-    if (!isNaN(priceNum)) {
-      filter.price = { $lte: priceNum }; // Пример: фильтр по цене меньше или равно
-    }
-  }
-
-  try {
-    const products = await Product.find(filter);
-    res.status(200).json(products);
-  } catch (error) {
-    console.error('Database query error:', error); // Логирование ошибки
-    res.status(500).json({ message: error.message });
-  }
-};
 
 // Tek bir ürünü getirme
 export const getProductById = async (req, res) => {
@@ -106,3 +83,41 @@ export const getNewArrival = async (req, res) => {
       res.status(500).json({ message: error.message });
     }
   };
+
+  // Tüm ürünleri listeleme
+export const getProducts = async (req, res) => {
+  const { writer, topSelling, newArrival, category, page = 1, limit = 10 } = req.query;
+
+  const filter = {};
+
+  // Filtreler ekleniyor
+  if (category) filter.category = category;
+  if (writer) filter.writer = writer;
+  if (topSelling) filter.topSelling = true; // добавьте это условие
+  if (newArrival) filter.newArrival = true; // добавьте это условие
+
+
+  try {
+    const options = {
+      page: parseInt(page, 10), // Sayfa numarasını sayıya çevir
+      limit: parseInt(limit, 10) // Limit değerini sayıya çevir
+    };
+
+    // Sayfalama ile ürünleri al
+    const products = await Product.find(filter)
+      .skip((options.page - 1) * options.limit) // Hangi sayfada olduğuna göre atla
+      .limit(options.limit); // Belirtilen limit kadar ürün getir
+
+    const total = await Product.countDocuments(filter); // Filtrelenmiş toplam ürün sayısı
+    const totalPages = Math.ceil(total / options.limit); // Toplam sayfa sayısını hesapla
+
+    res.status(200).json({
+      totalPages,
+      currentPage: options.page,
+      products,
+    });
+  } catch (error) {
+    console.error('Database query error:', error); // Hata loglama
+    res.status(500).json({ message: error.message });
+  }
+};

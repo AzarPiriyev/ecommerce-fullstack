@@ -11,10 +11,10 @@ const Footer = () => {
       ]
 
     const helpElements =[
-        {title: "FAQ", href: "/"},
-        {title: "Privacy Policy", href: "/"},
-        {title: "Customer Support", href: "/"},
-        {title: "Delivery Details", href: "/"},
+        {title: "FAQ", href: "/faq"},
+        {title: "Privacy Policy", href: "/privacypolicy"},
+        {title: "Customer Support", href: "/customersupport"},
+        {title: "Delivery Details", href: "/deliverydetails"},
       ]
     
   return (

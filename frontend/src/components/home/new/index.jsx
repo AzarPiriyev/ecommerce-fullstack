@@ -11,23 +11,21 @@ const New = () => {
   const [newArrivals, setNewArrivals] = useState([]);
 
   useEffect(() => {
-    const fetchProducts = async () => {
+    const fetchNewArrivals = async (page = 1, limit = 8) => {
       try {
-        const response = await fetch('http://localhost:3000/api/products');
+        const response = await fetch(`http://localhost:3000/api/products?page=${page}&limit=${limit}&newArrival=true`);
         if (!response.ok) throw new Error('Failed to fetch products');
         
-        const products = await response.json();
-        const filteredProducts = products.filter(product => product.newArrival === true);
-        setNewArrivals(filteredProducts);
+        const data = await response.json();
+        setNewArrivals(data.products || []); // Сохраняем только новые продукты
       } catch (error) {
         console.error('Error fetching products:', error);
       }
     };
 
-    fetchProducts();
+    fetchNewArrivals();
   }, []);
 
-  // Custom arrow components for slider
   const NextArrow = ({ onClick }) => (
     <button 
       className="absolute right-[-20px] top-1/2 -translate-y-1/2 p-2 bg-white rounded-full shadow-md hover:bg-gray-100 z-10" 
@@ -50,7 +48,7 @@ const New = () => {
     dots: true,
     infinite: true,
     speed: 500,
-    slidesToShow: 4, // Adjust the number of slides per view
+    slidesToShow: 4,
     slidesToScroll: 1,
     nextArrow: <NextArrow />,
     prevArrow: <PrevArrow />,
@@ -79,14 +77,16 @@ const New = () => {
   return (
     <Container>
       <div className="relative mb-10">
-      <div className='py-2 flex justify-between mb-2'>
+        <div className='py-2 flex justify-between mb-2'>
           <h1 className='text-[24px] font-semibold mb-6 text-[#2f2f2f]'>New</h1>
-          <Link to={'/products/new'}><p className='text-[20px] font-semibold text-[#979797] mt-1 underline cursor-pointer'>See All</p></Link>
+          <Link to={'/products/new'}>
+            <p className='text-[20px] font-semibold text-[#979797] mt-1 underline cursor-pointer'>See All</p>
+          </Link>
         </div>
 
         <Slider {...settings}>
-          {newArrivals.map((product, index) => (
-            <Link to={`/product/${product._id}`} key={index} className="p-4">
+          {newArrivals.map((product) => (
+            <Link to={`/product/${product._id}`} key={product._id} className="p-4">
               <div className="shadow-lg rounded-lg overflow-hidden bg-white">
                 <img 
                   src={product.imageUrl} 

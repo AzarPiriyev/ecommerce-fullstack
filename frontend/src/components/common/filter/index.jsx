@@ -2,45 +2,76 @@ import React, { useState, useEffect } from 'react';
 import { IoFilterSharp } from 'react-icons/io5';
 import { useNavigate } from 'react-router-dom';
 
-const Filter = ({updateSearchParams}) => {
+const Filter = ({ updateSearchParams, page }) => {
   const navigate = useNavigate();
   const [isFilterOpen, setIsFilterOpen] = useState(false);
   const [categories, setCategories] = useState([]);
   const [writers, setWriters] = useState([]);
   const [selectedCategoryId, setSelectedCategoryId] = useState('');
   const [selectedWriter, setSelectedWriter] = useState('');
+  const [selectedPriceRange, setSelectedPriceRange] = useState('');
 
   useEffect(() => {
     const fetchCategories = async () => {
       try {
         const response = await fetch('http://localhost:3000/api/products');
-        const products = await response.json();
-
+        
+        // Проверяем, успешно ли выполнен запрос
+        if (!response.ok) throw new Error('Failed to fetch products');
+    
+        const data = await response.json(); // Получаем JSON-ответ
+    
+        // Убедитесь, что products - это массив
+        const products = data.products; // Извлекаем массив products
+    
+        if (!Array.isArray(products)) {
+          console.error('Fetched data is not an array:', products);
+          return; // Завершаем выполнение, если products не является массивом
+        }
+    
+        // Получаем уникальные категории
         const uniqueCategories = [...new Set(products
           .filter(product => product.category)
           .map(product => product.category)
         )];
-
+    
         setCategories(uniqueCategories);
+        console.log(uniqueCategories);
       } catch (error) {
-        console.error('Error fetching writers:', error);
+        console.error('Error fetching categories:', error);
       }
     };
+    
     const fetchWriters = async () => {
       try {
         const response = await fetch('http://localhost:3000/api/products');
-        const products = await response.json();
-
+        
+        // Проверяем, успешно ли выполнен запрос
+        if (!response.ok) throw new Error('Failed to fetch products');
+    
+        const data = await response.json(); // Получаем JSON-ответ
+    
+        // Убедитесь, что products - это массив
+        const products = data.products; // Извлекаем массив products
+    
+        if (!Array.isArray(products)) {
+          console.error('Fetched data is not an array:', products);
+          return; // Завершаем выполнение, если products не является массивом
+        }
+    
+        // Получаем уникальных писателей
         const uniqueWriters = [...new Set(products
           .filter(product => product.writer)
           .map(product => product.writer)
         )];
-
+    
         setWriters(uniqueWriters);
+        console.log(uniqueWriters);
       } catch (error) {
         console.error('Error fetching writers:', error);
       }
     };
+    
 
     fetchCategories();
     fetchWriters();
@@ -69,23 +100,48 @@ const Filter = ({updateSearchParams}) => {
         params.set(key, value);
         setSelectedWriter(value);
       }
+    } else if (key === 'price') {
+      if (params.get(key) === value) {
+        params.delete(key);
+        setSelectedPriceRange('');
+      } else {
+        params.set(key, value);
+        setSelectedPriceRange(value);
+      }
     }
 
-    navigate(`/products/top-sellings?${params.toString()}`);
+    navigate(`/products/${page}?${params.toString()}`);
   };
 
   const handleCategoryClick = (category) => {
     goToRoute('category', category);
-    updateSearchParams({ category }); // Обновляем параметры фильтра
+    updateSearchParams({ category });
   };
 
   const handleWriterClick = (writer) => {
     goToRoute('writer', writer);
-    updateSearchParams({ writer }); // Обновляем параметры фильтра
+    updateSearchParams({ writer });
+  };
+
+  const handlePriceClick = (priceRange) => {
+    goToRoute('price', priceRange);
+    updateSearchParams({ price: priceRange });
+  };
+
+  // Reset all filters and refresh the page
+  const handleReset = () => {
+    setSelectedCategoryId('');
+    setSelectedWriter('');
+    setSelectedPriceRange('');
+    updateSearchParams({});
+    navigate(`/products/${page}`);
+
+    // Refresh the page
+    window.location.reload();
   };
 
   return (
-    <div className='mt-[20px]'>
+    <div className='mt-[20px] '>
       <div className='flex justify-end md:hidden'>
         <button onClick={toggleFilter}>
           <IoFilterSharp size={24} className='text-[#ff5100]' />
@@ -102,7 +158,7 @@ const Filter = ({updateSearchParams}) => {
             {categories.map((category, index) => (
               <li 
                 key={index} 
-                className={`text-[14px] text-[#2f2f2f] font-normal py-[7px] cursor-pointer hover:text-[#ff5100] transition ${selectedCategoryId === category.name ? 'text-[#ff5100]' : ''}`}
+                className={`text-[14px] text-[#2f2f2f] font-normal py-[7px] cursor-pointer capitalize hover:text-[#ff5100] transition ${selectedCategoryId === category ? 'text-[#ff5100]' : ''}`}
                 onClick={() => handleCategoryClick(category)}
               >
                 {category}
@@ -139,12 +195,25 @@ const Filter = ({updateSearchParams}) => {
         <ul className='mb-[20px]'>
           <p className='text-[16px] text-[#2f2f2f] font-medium py-[7px]'>Price</p>
           <div className='max-h-[180px] overflow-y-auto'>
-            <li className='text-[14px] text-[#2f2f2f] font-normal py-[7px] cursor-pointer hover:text-[#ff5100] transition'>0 - 10</li>
-            <li className='text-[14px] text-[#2f2f2f] font-normal py-[7px] cursor-pointer hover:text-[#ff5100] transition'>11 - 20</li>
-            <li className='text-[14px] text-[#2f2f2f] font-normal py-[7px] cursor-pointer hover:text-[#ff5100] transition'>21 - 30</li>
-            <li className='text-[14px] text-[#2f2f2f] font-normal py-[7px] cursor-pointer hover:text-[#ff5100] transition'>31+</li>
+            {['0-10', '10-20', '20-30', '30-50', '50-100', '100+'].map((range, index) => (
+              <li
+                key={index}
+                className={`text-[14px] text-[#2f2f2f] font-normal py-[7px] cursor-pointer hover:text-[#ff5100] transition ${selectedPriceRange === range ? 'text-[#ff5100]' : ''}`}
+                onClick={() => handlePriceClick(range)}
+              >
+                {range}
+              </li>
+            ))}
           </div>
         </ul>
+
+        {/* Reset Button */}
+        <button 
+          onClick={handleReset}
+          className='px-3 bg-[#ff5100] text-white text-[14px] font-semibold py-[10px] mt-[10px] rounded'
+        >
+          Reset Filters
+        </button>
       </div>
     </div>
   );

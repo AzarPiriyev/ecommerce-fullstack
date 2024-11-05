@@ -7,28 +7,40 @@ import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css"; 
 import { Link } from 'react-router-dom';
 
-
 const BestSellers = () => {
   const [bestSellingProducts, setBestSellingProducts] = useState([]);
 
   useEffect(() => {
-    const fetchBestSellingProducts = async () => {
+    const fetchBestSellingProducts = async (page = 1, limit = 8) => {
       try {
-        const response = await fetch('http://localhost:3000/api/products');
+        const response = await fetch(`http://localhost:3000/api/products?page=${page}&limit=${limit}&topSelling=true`);
         if (!response.ok) throw new Error('Failed to fetch products');
-        
-        const products = await response.json();
+    
+        const data = await response.json();
+        console.log('Fetched products:', data); // Логирование для отладки
+    
+        // Теперь извлекаем массив продуктов из data
+        const products = data.products; // Извлекаем массив продуктов
+    
+        // Проверка, является ли products массивом
+        if (!Array.isArray(products)) {
+          console.error('Fetched data is not an array:', products); // Логируем, что это не массив
+          throw new Error('Fetched data is not an array');
+        }
+    
+        // Фильтрация продуктов, если это необходимо
         const filteredProducts = products.filter(product => product.topSelling === true);
         setBestSellingProducts(filteredProducts);
       } catch (error) {
         console.error('Error fetching products:', error);
       }
     };
+    
+    
 
     fetchBestSellingProducts();
   }, []);
 
-  // Custom arrow components for slider
   const NextArrow = ({ onClick }) => (
     <button 
       className="absolute right-[-20px] top-1/2 -translate-y-1/2 p-2 bg-white rounded-full shadow-md hover:bg-gray-100 z-10" 
@@ -51,7 +63,7 @@ const BestSellers = () => {
     dots: true,
     infinite: true,
     speed: 500,
-    slidesToShow: 4, // Adjust the number of slides per view
+    slidesToShow: 4,
     slidesToScroll: 1,
     nextArrow: <NextArrow />,
     prevArrow: <PrevArrow />,
@@ -82,7 +94,9 @@ const BestSellers = () => {
       <div className="relative mb-10">
         <div className='py-2 flex justify-between mb-2'>
           <h1 className='text-[24px] font-semibold mb-6 text-[#2f2f2f]'>Top Sellings</h1>
-          <Link to={'/products/top-sellings'}><p className='text-[20px] font-semibold text-[#979797] mt-1 underline cursor-pointer'>See All</p></Link>
+          <Link to={'/products/top-sellings'}>
+            <p className='text-[20px] font-semibold text-[#979797] mt-1 underline cursor-pointer'>See All</p>
+          </Link>
         </div>
 
         <Slider {...settings}>

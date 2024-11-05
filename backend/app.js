@@ -10,6 +10,7 @@ import faqRoutes from './routes/faq.routes.js';
 import contactsRoutes from './routes/contact.routes.js';
 import categoryRoutes from './routes/category.routes.js';
 import informRoutes from './routes/inform.routes.js';
+import searchRoutes from './routes/search.routes.js';
 
 const server = express();  // `server` olarak adlandırılmış
 
@@ -32,6 +33,8 @@ server.use('/api/faqs', faqRoutes);
 server.use('/api/contacts', contactsRoutes);
 server.use('/api/categories', categoryRoutes);
 server.use('/api/informs', informRoutes);
+server.use('/api/search', searchRoutes);
+
 
 const PORT = process.env.PORT || 3004;
 const MONGODB_URL = process.env.MONGODB_URL;

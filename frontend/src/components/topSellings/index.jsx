@@ -3,78 +3,83 @@ import axios from 'axios';
 import Filter from '../common/filter';
 import Container from '../common/container';
 import { GrBasket } from "react-icons/gr";
-import { Link } from 'react-router-dom';
+import { Link, useLocation, useNavigate } from 'react-router-dom';
 
 const TopSellings = () => {
   const [topSellingProducts, setTopSellingProducts] = useState([]);
   const [filteredProducts, setFilteredProducts] = useState([]);
   const [searchParams, setSearchParams] = useState({});
+  const [totalPages, setTotalPages] = useState(1); // Для отслеживания общего количества страниц
+  const limit = 12; // Лимит продуктов на одну страницу
+
+  const location = useLocation();
+  const navigate = useNavigate();
+
+  // Получение текущей страницы из URL или установка по умолчанию на 1
+  const currentPage = new URLSearchParams(location.search).get('page') || 1;
 
   useEffect(() => {
     const fetchTopSellingProducts = async () => {
       try {
-        const response = await axios.get('http://localhost:3000/api/products');
-        const filteredProducts = response.data.filter(product => product.topSelling);
-        setTopSellingProducts(filteredProducts);
-        setFilteredProducts(filteredProducts);
+        const response = await axios.get('http://localhost:3000/api/products', { 
+          params: { 
+            page: currentPage, 
+            limit,
+            topSelling: true // добавляем этот параметр
+          } 
+        });
+        setTopSellingProducts(response.data.products); 
+        setFilteredProducts(response.data.products);
+        setTotalPages(response.data.totalPages); 
+        console.log(response.data.products);
       } catch (error) {
         console.error('Error fetching top selling products:', error);
       }
     };
-
+  
     fetchTopSellingProducts();
-  }, []);
+  }, [currentPage]); // Зависимость от currentPage для перезагрузки данных при изменении страницы
 
   useEffect(() => {
-    const fetchFilteredProducts = async () => {
-      const params = new URLSearchParams();
-      
-      if (searchParams.category) {
-        params.set("category", searchParams.category);
-      }
-      if (searchParams.writer) {
-        params.set("writer", searchParams.writer);
-      }
-      if (searchParams.price) {
-        params.set("price", searchParams.price);
+    const applyFilters = () => {
+      const { category, writer, price } = searchParams;
+      let filtered = topSellingProducts;
+
+      if (category) {
+        filtered = filtered.filter(product => product.category === category);
       }
 
-      try {
-        const response = await axios.get(`http://localhost:3000/api/products?${params.toString()}`);
-        console.log(response.data); // API yanıtını kontrol edin
-
-        const filteredProducts = response.data.filter(product => {
-          const matchesCategory = searchParams.category ? product.category === searchParams.category : true;
-          const matchesWriter = searchParams.writer ? product.writer === searchParams.writer : true;
-          const matchesPrice = searchParams.price ? product.price <= searchParams.price : true; // Fiyat filtresi
-          return matchesCategory && matchesWriter && matchesPrice; // Combine filters
-        });
-
-        console.log(filteredProducts); // Filtrelenmiş ürünleri kontrol edin
-        setFilteredProducts(filteredProducts);
-      } catch (error) {
-        console.error('Error fetching filtered products:', error);
+      if (writer) {
+        filtered = filtered.filter(product => product.writer === writer);
       }
+
+      if (price) {
+        const [minPrice, maxPrice] = price.split('-').map(Number);
+        filtered = filtered.filter(product => 
+          product.price >= (minPrice || 0) && (maxPrice ? product.price <= maxPrice : true)
+        );
+      }
+
+      setFilteredProducts(filtered);
     };
 
-    if (searchParams.category || searchParams.writer || searchParams.price) {
-      fetchFilteredProducts();
-    } else {
-      setFilteredProducts(topSellingProducts);
-    }
+    applyFilters();
   }, [searchParams, topSellingProducts]);
 
   const updateSearchParams = (params) => {
     setSearchParams(prev => ({ ...prev, ...params }));
-    console.log('Updating search params:', params); // Добавьте эту строку
+  };
+
+  const handlePageChange = (page) => {
+    navigate(`?page=${page}`); // Обновляем URL с новой страницей
   };
 
   const productsToDisplay = filteredProducts.length > 0 ? filteredProducts : topSellingProducts;
 
   return (
     <Container>
-      <div className="flex flex-col md:flex-row gap-8">
-        <Filter updateSearchParams={updateSearchParams} />
+      <div className="flex flex-col md:flex-row gap-8 mb-10">
+        <Filter updateSearchParams={updateSearchParams} page="top-sellings" />
         
         <div className="flex-1">
           <h1 className="text-[24px] text-[#2f2f2f] font-semibold text-center mb-6">Top Selling Products</h1>
@@ -87,13 +92,30 @@ const TopSellings = () => {
                   <p className="text-sm text-gray-500 overflow-hidden whitespace-nowrap text-ellipsis">{product.writer}</p>
                   <p className="text-md font-semibold text-[#2f2f2f] mb-3">${product.price}</p>
                   <div className="flex items-center justify-between">
-                    <button className="text-white bg-[#ff5100] py-1 px-3 rounded-lg text-sm font-semibold hover:bg-[#ff7833] transition duration-200">
+                    <button className="text-white bg-[#ff5100] py-1 px-3 rounded-lg text-sm font-semibold hover:bg-[#ff7833] transition duration-200 overflow-hidden whitespace-nowrap text-ellipsis">
                       Add to Cart
                     </button>
                     <GrBasket className="text-[#ff5100] text-xl" />
                   </div>
                 </div>
               </Link>
+            ))}
+          </div>
+
+          {/* Пагинация */}
+          <div className="flex gap-3 justify-center mt-8">
+            {Array.from({ length: totalPages }, (_, index) => (
+              <button 
+                key={index} 
+                onClick={() => handlePageChange(index + 1)}
+                className={`w-10 h-10 border rounded-full font-semibold transition ${
+                  Number(currentPage) === index + 1 
+                    ? 'bg-gray-300 text-white' 
+                    : 'bg-gray-200 text-gray-500 hover:bg-gray-300'
+                }`}
+              >
+                {index + 1}
+              </button>
             ))}
           </div>
         </div>

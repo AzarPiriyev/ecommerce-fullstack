@@ -18,6 +18,10 @@ import CategoriesAdmin from './admin/pages/categoriesPage';
 import ContactPage from './pages/contactPage';
 import InformPage from './admin/pages/informPage';
 import TopPages from './pages/topPages';
+import FaqPage from './pages/faqPage';
+import PriviacyPolicyPages from './pages/priviacyPolicyPages';
+import CustomerSupportPages from './pages/customerSupportPages';
+import DeliveryDetailsPage from './pages/deliveryDetailsPage';
 
 
 function App() {
@@ -42,6 +46,11 @@ function App() {
     <Route path="/library" element={<WishlistPage />} />
     <Route path="/categories" element={<CategoriesPage />} />
     <Route path="/contact" element={<ContactPage />} />
+    <Route path="/faq" element={<FaqPage />} />
+    <Route path="/privacypolicy" element={<PriviacyPolicyPages />} />
+    <Route path="/customersupport" element={<CustomerSupportPages />} />
+    <Route path="/deliverydetails" element={<DeliveryDetailsPage />} />
+
     {/* Admin Panel */}
     <Route path="/admin" element={<ProductsPage />} />
     <Route path="/admin/users" element={<UsersPage/>} />

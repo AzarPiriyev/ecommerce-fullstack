@@ -11,7 +11,7 @@ const New = () => {
   const [newArrivals, setNewArrivals] = useState([]);
 
   useEffect(() => {
-    const fetchNewArrivals = async (page = 1, limit = 8) => {
+    const fetchNewArrivals = async (page = 1, limit = 6) => {
       try {
         const response = await fetch(`http://localhost:3000/api/products?page=${page}&limit=${limit}&newArrival=true`);
         if (!response.ok) throw new Error('Failed to fetch products');

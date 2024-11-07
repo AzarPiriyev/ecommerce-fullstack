@@ -7,74 +7,43 @@ import { Link, useLocation, useNavigate } from 'react-router-dom';
 
 const TopSellings = () => {
   const [topSellingProducts, setTopSellingProducts] = useState([]);
-  const [filteredProducts, setFilteredProducts] = useState([]);
   const [searchParams, setSearchParams] = useState({});
-  const [totalPages, setTotalPages] = useState(1); // Для отслеживания общего количества страниц
-  const limit = 12; // Лимит продуктов на одну страницу
+  const [totalPages, setTotalPages] = useState(1);
+  const limit = 12;
 
   const location = useLocation();
   const navigate = useNavigate();
-
-  // Получение текущей страницы из URL или установка по умолчанию на 1
   const currentPage = new URLSearchParams(location.search).get('page') || 1;
 
+  const fetchTopSellingProducts = async () => {
+    try {
+      const response = await axios.get('http://localhost:3000/api/products', { 
+        params: { 
+          page: currentPage, 
+          limit,
+          topSelling: true,
+          ...searchParams // include filter parameters in the request
+        } 
+      });
+      setTopSellingProducts(response.data.products);
+      setTotalPages(response.data.totalPages);
+    } catch (error) {
+      console.error('Error fetching top selling products:', error);
+    }
+  };
+
   useEffect(() => {
-    const fetchTopSellingProducts = async () => {
-      try {
-        const response = await axios.get('http://localhost:3000/api/products', { 
-          params: { 
-            page: currentPage, 
-            limit,
-            topSelling: true // добавляем этот параметр
-          } 
-        });
-        setTopSellingProducts(response.data.products); 
-        setFilteredProducts(response.data.products);
-        setTotalPages(response.data.totalPages); 
-        console.log(response.data.products);
-      } catch (error) {
-        console.error('Error fetching top selling products:', error);
-      }
-    };
-  
     fetchTopSellingProducts();
-  }, [currentPage]); // Зависимость от currentPage для перезагрузки данных при изменении страницы
-
-  useEffect(() => {
-    const applyFilters = () => {
-      const { category, writer, price } = searchParams;
-      let filtered = topSellingProducts;
-
-      if (category) {
-        filtered = filtered.filter(product => product.category === category);
-      }
-
-      if (writer) {
-        filtered = filtered.filter(product => product.writer === writer);
-      }
-
-      if (price) {
-        const [minPrice, maxPrice] = price.split('-').map(Number);
-        filtered = filtered.filter(product => 
-          product.price >= (minPrice || 0) && (maxPrice ? product.price <= maxPrice : true)
-        );
-      }
-
-      setFilteredProducts(filtered);
-    };
-
-    applyFilters();
-  }, [searchParams, topSellingProducts]);
+  }, [currentPage, searchParams]);
 
   const updateSearchParams = (params) => {
     setSearchParams(prev => ({ ...prev, ...params }));
+    navigate(`?page=1`); // Reset to the first page when filters are applied
   };
 
   const handlePageChange = (page) => {
-    navigate(`?page=${page}`); // Обновляем URL с новой страницей
+    navigate(`?page=${page}`);
   };
-
-  const productsToDisplay = filteredProducts.length > 0 ? filteredProducts : topSellingProducts;
 
   return (
     <Container>
@@ -84,7 +53,7 @@ const TopSellings = () => {
         <div className="flex-1">
           <h1 className="text-[24px] text-[#2f2f2f] font-semibold text-center mb-6">Top Selling Products</h1>
           <div className="grid grid-cols-2 gap-6 px-4 sm:grid-cols-3 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 mb-10">
-            {productsToDisplay.map((product) => (
+            {topSellingProducts.map((product) => (
               <Link to={`/product/${product._id}`} key={product._id} className="shadow-lg rounded-lg overflow-hidden transform transition duration-200 hover:scale-105 bg-white">
                 <img src={product.imageUrl} alt={product.name} className="h-48 w-full object-cover" />
                 <div className="p-4">
@@ -102,7 +71,7 @@ const TopSellings = () => {
             ))}
           </div>
 
-          {/* Пагинация */}
+          {/* Pagination */}
           <div className="flex gap-3 justify-center mt-8">
             {Array.from({ length: totalPages }, (_, index) => (
               <button 

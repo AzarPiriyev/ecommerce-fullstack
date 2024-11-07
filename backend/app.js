@@ -11,6 +11,9 @@ import contactsRoutes from './routes/contact.routes.js';
 import categoryRoutes from './routes/category.routes.js';
 import informRoutes from './routes/inform.routes.js';
 import searchRoutes from './routes/search.routes.js';
+import authRoutes from './routes/auth.routes.js';
+import cartRoutes from './routes/cart.routes.js';
+
 
 const server = express();  // `server` olarak adlandırılmış
 
@@ -34,6 +37,9 @@ server.use('/api/contacts', contactsRoutes);
 server.use('/api/categories', categoryRoutes);
 server.use('/api/informs', informRoutes);
 server.use('/api/search', searchRoutes);
+server.use('/api/auth', authRoutes);
+server.use('/api/cart', cartRoutes);
+
 
 
 const PORT = process.env.PORT || 3004;

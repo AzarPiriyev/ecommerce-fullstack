@@ -4,10 +4,21 @@ import Container from '../common/container';
 import { GrBasket } from "react-icons/gr";
 import { FaRegHeart } from "react-icons/fa";
 import axios from 'axios';
+import useCartStore from '../../store/cart';  // Zustand store'unu import et
 
 const ProductDetail = () => {
   const { id } = useParams(); // URL'den dinamik id'yi almak için
   const [product, setProduct] = useState(null);
+  const [userId, setUserId] = useState(null); // Состояние для userId
+  const { addToCart } = useCartStore();  // addToCart fonksiyonunu store'dan alıyoruz
+
+  useEffect(() => {
+    // Получаем userId из localStorage
+    const user = JSON.parse(localStorage.getItem("user"));
+    if (user) {
+      setUserId(user._id); // Устанавливаем userId в состояние
+    }
+  }, []); // Эффект срабатывает только один раз при монтировании компонента
 
   useEffect(() => {
     // Dinamik olarak ürün verisini çekmek için
@@ -25,10 +36,21 @@ const ProductDetail = () => {
 
   if (!product) return <p>Yükleniyor...</p>; // Ürün verisi yüklenene kadar gösterilecek mesaj
 
+  const handleAddToCart = () => {
+    if (userId) {
+      // Eğer kullanıcı ID'si varsa sepete ekleme işlemini yapıyoruz
+      const quantity = 1; // Örnek miktar (bu değeri artırmak mümkün)
+      addToCart(userId, product._id, quantity); // Sepete ekliyoruz
+      alert("added")
+    } else {
+      // Kullanıcı giriş yapmamışsa uyarı verebiliriz
+      alert("Lütfen giriş yapın.");
+    }
+  };
+
   return (
     <Container>
       <div className='mt-[40px] mb-[40px]'>
-
         <div className='mb-[40px] md:flex'>
           <div className='py-[20px] px-[50px] mb-[20px] flex justify-center md:justify-start'>
             <img src={product.imageUrl || "/src/assets/images/product.jpeg"} alt={product.name} className='w-[220px] h-[340px] xl:w-[260px] md:h-[400px]'/>
@@ -41,8 +63,11 @@ const ProductDetail = () => {
             <div className='mb-[30px] md:flex md:justify-between'>
               <p className='text-[30px] font-semibold text-[#2f2f2f] text-center mb-[20px]'>${product.price}</p>
               <div>
-                <button className='flex gap-2 border border-[#ff5100] bg-[#ff5100] py-[17px] justify-center rounded-[31px] w-full mb-2 lg:min-w-[225px] xl:min-w-[280px] '>
-                  <GrBasket className='text-white mt-[3px]'/>
+                <button 
+                  className='flex gap-2 border border-[#ff5100] bg-[#ff5100] py-[17px] justify-center rounded-[31px] w-full mb-2 lg:min-w-[225px] xl:min-w-[280px]'
+                  onClick={handleAddToCart}
+                >
+                  <GrBasket className='text-white mt-[3px]' />
                   <p className='text-5 font-bold text-white'>Add to Cart</p>
                 </button>
                 <p className='text-[16px] font-bold text-[#2e2e2e] text-center'>Available in {product.availability}</p>
@@ -50,7 +75,7 @@ const ProductDetail = () => {
             </div>
             <div className='flex gap-[10px]'>
               <div className='border-2 border-[#fc521f] py-3 px-3 rounded-[50%]'>
-                <FaRegHeart className='text-[#fc521f] h-[24px] w-[24px]'/>
+                <FaRegHeart className='text-[#fc521f] h-[24px] w-[24px]' />
               </div>
               <p className='text-[14px] text-[#2f2f2f] font-normal mt-[15px]'>Add to Library</p>
             </div>
@@ -61,7 +86,6 @@ const ProductDetail = () => {
           <h3 className='mb-[20px] text-[20px] font-medium text-[#2f2f2f]'>About the Book</h3>
           <p className='text-[#2f2f2f] text-[16px] font-normal'>{product.description}</p>
         </div>
-
       </div>
     </Container>
   );

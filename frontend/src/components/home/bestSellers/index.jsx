@@ -11,7 +11,7 @@ const BestSellers = () => {
   const [bestSellingProducts, setBestSellingProducts] = useState([]);
 
   useEffect(() => {
-    const fetchBestSellingProducts = async (page = 1, limit = 8) => {
+    const fetchBestSellingProducts = async (page = 1, limit = 6) => {
       try {
         const response = await fetch(`http://localhost:3000/api/products?page=${page}&limit=${limit}&topSelling=true`);
         if (!response.ok) throw new Error('Failed to fetch products');

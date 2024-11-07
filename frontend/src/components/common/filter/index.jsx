@@ -9,7 +9,7 @@ const Filter = ({ updateSearchParams, page }) => {
   const [writers, setWriters] = useState([]);
   const [selectedCategoryId, setSelectedCategoryId] = useState('');
   const [selectedWriter, setSelectedWriter] = useState('');
-  const [selectedPriceRange, setSelectedPriceRange] = useState('');
+ 
 
   useEffect(() => {
     const fetchCategories = async () => {
@@ -100,15 +100,7 @@ const Filter = ({ updateSearchParams, page }) => {
         params.set(key, value);
         setSelectedWriter(value);
       }
-    } else if (key === 'price') {
-      if (params.get(key) === value) {
-        params.delete(key);
-        setSelectedPriceRange('');
-      } else {
-        params.set(key, value);
-        setSelectedPriceRange(value);
-      }
-    }
+    } 
 
     navigate(`/products/${page}?${params.toString()}`);
   };
@@ -123,16 +115,12 @@ const Filter = ({ updateSearchParams, page }) => {
     updateSearchParams({ writer });
   };
 
-  const handlePriceClick = (priceRange) => {
-    goToRoute('price', priceRange);
-    updateSearchParams({ price: priceRange });
-  };
+
 
   // Reset all filters and refresh the page
   const handleReset = () => {
     setSelectedCategoryId('');
     setSelectedWriter('');
-    setSelectedPriceRange('');
     updateSearchParams({});
     navigate(`/products/${page}`);
 
@@ -191,21 +179,6 @@ const Filter = ({ updateSearchParams, page }) => {
         
         <hr />
         
-        {/* Price Section */}
-        <ul className='mb-[20px]'>
-          <p className='text-[16px] text-[#2f2f2f] font-medium py-[7px]'>Price</p>
-          <div className='max-h-[180px] overflow-y-auto'>
-            {['0-10', '10-20', '20-30', '30-50', '50-100', '100+'].map((range, index) => (
-              <li
-                key={index}
-                className={`text-[14px] text-[#2f2f2f] font-normal py-[7px] cursor-pointer hover:text-[#ff5100] transition ${selectedPriceRange === range ? 'text-[#ff5100]' : ''}`}
-                onClick={() => handlePriceClick(range)}
-              >
-                {range}
-              </li>
-            ))}
-          </div>
-        </ul>
 
         {/* Reset Button */}
         <button 

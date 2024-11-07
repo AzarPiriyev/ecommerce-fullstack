@@ -22,6 +22,8 @@ import FaqPage from './pages/faqPage';
 import PriviacyPolicyPages from './pages/priviacyPolicyPages';
 import CustomerSupportPages from './pages/customerSupportPages';
 import DeliveryDetailsPage from './pages/deliveryDetailsPage';
+import LoginPage from './pages/loginPage';
+import SignupPage from './pages/signupPage';
 
 
 function App() {
@@ -50,6 +52,8 @@ function App() {
     <Route path="/privacypolicy" element={<PriviacyPolicyPages />} />
     <Route path="/customersupport" element={<CustomerSupportPages />} />
     <Route path="/deliverydetails" element={<DeliveryDetailsPage />} />
+    <Route path="/login" element={<LoginPage />} />
+    <Route path="/signup" element={<SignupPage />} />
 
     {/* Admin Panel */}
     <Route path="/admin" element={<ProductsPage />} />

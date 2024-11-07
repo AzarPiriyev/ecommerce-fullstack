@@ -1,17 +1,21 @@
 import React, { useEffect, useState } from 'react';
-import axios from 'axios'; // Ensure you import axios
+import axios from 'axios';
 import Container from '../../common/container';
 import { IoSearch } from "react-icons/io5";
 import { PiBooks } from "react-icons/pi";
 import { GrBasket } from "react-icons/gr";
-import { VscAccount } from "react-icons/vsc";
+import { VscAccount, VscSignOut } from "react-icons/vsc";
 import { GiHamburgerMenu } from "react-icons/gi";
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
+import { FaUserShield } from "react-icons/fa"; // Admin icon (or any other icon you prefer)
 
 const Header = () => {
     const [isSidebarOpen, setIsSidebarOpen] = useState(false);
     const [foundProducts, setFoundProducts] = useState([]);
     const [keyword, setKeyword] = useState('');
+    const [isLoggedIn, setIsLoggedIn] = useState(false);
+    const [isAdmin, setIsAdmin] = useState(false); // To track if the user is an admin
+    const navigate = useNavigate();
 
     const navElements = [
         { title: "NEW", href: "/products/new" },
@@ -27,10 +31,9 @@ const Header = () => {
         try {
             if (keyword && keyword.trim() !== '' && keyword.trim().length > 3) {
                 const response = await axios.get(`http://localhost:3000/api/search/${keyword}`);
-                setFoundProducts(response.data.data); // Update state with found products
-                console.log(foundProducts)
+                setFoundProducts(response.data.data);
             } else {
-                setFoundProducts([]); // Clear results if input is less than 3 characters
+                setFoundProducts([]);
             }
         } catch (error) {
             console.error(error);
@@ -44,6 +47,23 @@ const Header = () => {
             setFoundProducts([]);
         }
     }, [keyword]);
+
+    // Update login state and check for user role (Admin) when the component mounts
+    useEffect(() => {
+        const user = JSON.parse(localStorage.getItem('user'));
+        setIsLoggedIn(!!user);
+        if (user && user.role === 'Admin') {
+            setIsAdmin(true); // Set admin state if the user role is Admin
+        }
+    }, []);
+
+    const handleLogout = () => {
+        localStorage.removeItem('user'); // Remove user data from localStorage
+        localStorage.removeItem('token'); // Remove the token from localStorage if needed
+        setIsLoggedIn(false); // Set login state to false
+        setIsAdmin(false); // Reset admin state
+        navigate('/'); // Redirect to homepage or login page
+    };
 
     return (
         <div>
@@ -72,8 +92,15 @@ const Header = () => {
                             <div className='absolute top-[50px] left-0 w-full bg-white border border-[#979797] z-10'>
                                 <ul>
                                     {foundProducts.map((product) => (
-                                        <li key={product._id} className='p-2 hover:bg-gray-100'>
-                                            <Link onClick={() => setKeyword('')} to={`/product/${product._id}`}>{product.name}</Link> {/* Adjust to your product property */}
+                                        <li key={product._id} className='p-2 flex items-center hover:bg-gray-100'>
+                                            <Link onClick={() => setKeyword('')} to={`/product/${product._id}`} className="flex items-center">
+                                                <img 
+                                                    src={product.imageUrl}
+                                                    alt={product.name}
+                                                    className="w-12 h-12 object-cover mr-3"
+                                                />
+                                                <span>{product.name}</span>
+                                            </Link>
                                         </li>
                                     ))}
                                 </ul>
@@ -94,10 +121,29 @@ const Header = () => {
                                 <p className='text-[14px] font-normal text-[#979797] ml-[2px] hidden md:block'>Cart</p>
                             </div>
                         </Link>
-                        <div>
-                            <VscAccount className='h-[25px] w-[25px] text-[#979797] mb-[2px] ml-[3px] md:h-[30px] md:w-[30px]' />
-                            <p className='text-[14px] font-normal text-[#979797] hidden md:block'>Log in</p>
-                        </div>
+                        {isLoggedIn ? (
+                            <>
+                                {isAdmin && (
+                                    <Link to="/admin">
+                                        <div className="cursor-pointer">
+                                            <FaUserShield className='h-[25px] w-[25px] text-[#ff5100] md:h-[30px] md:w-[30px]' />
+                                            <p className='text-[14px] font-normal text-[#ff5100] hidden md:block'>Admin</p>
+                                        </div>
+                                    </Link>
+                                )}
+                                <div onClick={handleLogout} className="cursor-pointer">
+                                    <VscSignOut className='h-[25px] w-[25px] text-[#979797] md:h-[30px] md:w-[30px]' />
+                                    <p className='text-[14px] font-normal text-[#979797] hidden md:block'>Log out</p>
+                                </div>
+                            </>
+                        ) : (
+                            <Link to={'/login'}>
+                                <div>
+                                    <VscAccount className='h-[25px] w-[25px] text-[#979797] md:h-[30px] md:w-[30px]' />
+                                    <p className='text-[14px] font-normal text-[#979797] hidden md:block'>Log in</p>
+                                </div>
+                            </Link>
+                        )}
                     </div>
                 </div>
 
@@ -126,30 +172,21 @@ const Header = () => {
                         <div className='absolute top-[50px] left-0 w-full bg-white border border-[#979797] z-10'>
                             <ul>
                                 {foundProducts.map((product) => (
-                                    <li key={product._id} className='p-2 hover:bg-gray-100'>
-                                        <Link onClick={() => setKeyword('')} to={`/product/${product._id}`}>{product.name}</Link>
+                                    <li key={product._id} className='p-2 flex items-center hover:bg-gray-100'>
+                                        <Link onClick={() => setKeyword('')} to={`/product/${product._id}`} className="flex items-center">
+                                            <img 
+                                                src={product.imageUrl}
+                                                alt={product.name}
+                                                className="w-12 h-12 object-cover mr-3"
+                                            />
+                                            <span>{product.name}</span>
+                                        </Link>
                                     </li>
                                 ))}
                             </ul>
                         </div>
                     )}
                 </div>
-
-                {/* Mobile Sidebar (Hamburger Menu) */}
-                <div className={`fixed top-0 left-0 h-full w-[250px] bg-white shadow-lg z-50 transition-transform duration-300 ease-in-out ${isSidebarOpen ? 'translate-x-0' : '-translate-x-full'}`}>
-                    <div className='flex justify-between p-4'>
-                        <h2 className='text-[18px] font-bold'>Menu</h2>
-                        <button onClick={toggleSidebar} className="text-[20px]">X</button>
-                    </div>
-                    <ul className='flex flex-col p-4 text-[#979797] text-[18px] font-medium'>
-                        {navElements.map((link, index) => (
-                            <li key={index} className='mb-4'>
-                                <a href={link.href}>{link.title}</a>
-                            </li>
-                        ))}
-                    </ul>
-                </div>
-
             </Container>
         </div>
     );

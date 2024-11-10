@@ -87,11 +87,11 @@ const New = () => {
         <Slider {...settings}>
           {newArrivals.map((product) => (
             <Link to={`/product/${product._id}`} key={product._id} className="p-4">
-              <div className="shadow-lg rounded-lg overflow-hidden bg-white">
+              <div className="shadow-lg rounded-lg overflow-hidden border-2 bg-white">
                 <img 
                   src={product.imageUrl} 
                   alt={product.name} 
-                  className="h-48 w-full object-cover rounded-t-lg" 
+                  className="h-48 w-40 mx-auto object-cover rounded-t-lg" 
                 />
                 <div className="p-4">
                   <p className="text-lg font-semibold text-gray-700 overflow-hidden whitespace-nowrap text-ellipsis">

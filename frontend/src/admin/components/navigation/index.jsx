@@ -13,7 +13,7 @@ const Navigation = () => {
       <div className='flex flex-col w-[200px] py-[20px] px-[10px] h-full'>
         {/* Logo */}
         <div className='mb-[40px]'>
-          <img src="/src/assets/images/babil-logo.svg" alt="Babil Logo" className='w-full' />
+          <Link to={'/'}><img src="/src/assets/images/babil-logo.svg" alt="Babil Logo" className='w-full' /></Link>
         </div>
 
         {/* Navigation Items */}

@@ -7,10 +7,7 @@ const CartPage = () => {
   return (
     <>
     <Container>
-    <div className='lg:flex lg:justify-between'>
     <Basket/>
-    <Total/>
-    </div>
     </Container>
     </>
   )

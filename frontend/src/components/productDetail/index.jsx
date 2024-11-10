@@ -2,30 +2,31 @@ import React, { useState, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
 import Container from '../common/container';
 import { GrBasket } from "react-icons/gr";
-import { FaRegHeart } from "react-icons/fa";
+import { FaRegHeart, FaHeart } from "react-icons/fa"; // Add filled heart icon
 import axios from 'axios';
-import useCartStore from '../../store/cart';  // Zustand store'unu import et
+import useCartStore from '../../store/cart';
+import useWishlistStore from '../../store/wishlist';
 
 const ProductDetail = () => {
-  const { id } = useParams(); // URL'den dinamik id'yi almak için
+  const { id } = useParams(); 
   const [product, setProduct] = useState(null);
-  const [userId, setUserId] = useState(null); // Состояние для userId
-  const { addToCart } = useCartStore();  // addToCart fonksiyonunu store'dan alıyoruz
+  const [userId, setUserId] = useState(null);
+  const { addToCart } = useCartStore(); 
+  const { addWishlistItem, removeWishlistItem, wishlist } = useWishlistStore(); // Import removeWishlistItem
+  const [isInWishlist, setIsInWishlist] = useState(false);
 
   useEffect(() => {
-    // Получаем userId из localStorage
     const user = JSON.parse(localStorage.getItem("user"));
     if (user) {
-      setUserId(user._id); // Устанавливаем userId в состояние
+      setUserId(user._id);
     }
-  }, []); // Эффект срабатывает только один раз при монтировании компонента
+  }, []);
 
   useEffect(() => {
-    // Dinamik olarak ürün verisini çekmek için
     const fetchProduct = async (id) => {
       try {
         const response = await axios.get(`http://localhost:3000/api/products/${id}`);
-        setProduct(response.data); // Veriyi durum değişkenine atama
+        setProduct(response.data);
       } catch (error) {
         console.error("Ürün verisi getirilemedi:", error);
       }
@@ -34,16 +35,36 @@ const ProductDetail = () => {
     fetchProduct(id);
   }, [id]);
 
-  if (!product) return <p>Yükleniyor...</p>; // Ürün verisi yüklenene kadar gösterilecek mesaj
+  // Check if the product is in the wishlist on component mount
+  useEffect(() => {
+    if (wishlist.some((item) => item.productId === id)) {
+      setIsInWishlist(true);
+    }
+  }, [wishlist, id]);
+
+  if (!product) return <p>Yükleniyor...</p>;
 
   const handleAddToCart = () => {
     if (userId) {
-      // Eğer kullanıcı ID'si varsa sepete ekleme işlemini yapıyoruz
-      const quantity = 1; // Örnek miktar (bu değeri artırmak mümkün)
-      addToCart(userId, product._id, quantity); // Sepete ekliyoruz
-      alert("added")
+      const quantity = 1;
+      addToCart(userId, product._id, quantity);
+      alert("Sepete eklendi.");
     } else {
-      // Kullanıcı giriş yapmamışsa uyarı verebiliriz
+      alert("Lütfen giriş yapın.");
+    }
+  };
+
+  const handleWishlistToggle = () => {
+    if (userId) {
+      if (isInWishlist) {
+        removeWishlistItem(userId, product._id);
+        alert("Wishlist'ten kaldırıldı.");
+      } else {
+        addWishlistItem(userId, product._id);
+        alert("Wishlist'e eklendi.");
+      }
+      setIsInWishlist(!isInWishlist); // Toggle the wishlist state
+    } else {
       alert("Lütfen giriş yapın.");
     }
   };
@@ -74,8 +95,15 @@ const ProductDetail = () => {
               </div>
             </div>
             <div className='flex gap-[10px]'>
-              <div className='border-2 border-[#fc521f] py-3 px-3 rounded-[50%]'>
-                <FaRegHeart className='text-[#fc521f] h-[24px] w-[24px]' />
+              <div 
+                className='border-2 border-[#fc521f] py-3 px-3 rounded-[50%]'
+                onClick={handleWishlistToggle} // Toggle on click
+              >
+                {isInWishlist ? (
+                  <FaHeart className='text-[#fc521f] h-[24px] w-[24px]' /> // Red heart if in wishlist
+                ) : (
+                  <FaRegHeart className='text-[#fc521f] h-[24px] w-[24px]' /> // Outline if not in wishlist
+                )}
               </div>
               <p className='text-[14px] text-[#2f2f2f] font-normal mt-[15px]'>Add to Library</p>
             </div>

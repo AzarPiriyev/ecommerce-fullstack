@@ -58,7 +58,7 @@ export const fetchCartItems = async (req, res) => {
     if (!userId) {
       return res.status(400).json({
         success: false,
-        message: "User id is manadatory!",
+        message: "User id is mandatory!",
       });
     }
 
@@ -74,9 +74,7 @@ export const fetchCartItems = async (req, res) => {
       });
     }
 
-    const validItems = cart.items.filter(
-      (productItem) => productItem.productId
-    );
+    const validItems = cart.items.filter((productItem) => productItem.productId);
 
     if (validItems.length < cart.items.length) {
       cart.items = validItems;
@@ -88,6 +86,7 @@ export const fetchCartItems = async (req, res) => {
       imageUrl: item.productId.imageUrl,
       name: item.productId.name,
       price: item.productId.price,
+      quantity: item.quantity, // Quantity bilgisi eklendi
     }));
 
     res.status(200).json({
@@ -132,7 +131,7 @@ export const updateCartItemQty = async (req, res) => {
     if (findCurrentProductIndex === -1) {
       return res.status(404).json({
         success: false,
-        message: "Cart item not present !",
+        message: "Cart item not present!",
       });
     }
 
@@ -141,7 +140,7 @@ export const updateCartItemQty = async (req, res) => {
 
     await cart.populate({
       path: "items.productId",
-      select: "image title price salePrice",
+      select: "imageUrl name price",
     });
 
     const populateCartItems = cart.items.map((item) => ({
@@ -149,6 +148,7 @@ export const updateCartItemQty = async (req, res) => {
       imageUrl: item.productId ? item.productId.imageUrl : null,
       name: item.productId ? item.productId.name : "Product not found",
       price: item.productId ? item.productId.price : null,
+      quantity: item.quantity, // Quantity bilgisi eklendi
     }));
 
     res.status(200).json({
@@ -166,6 +166,7 @@ export const updateCartItemQty = async (req, res) => {
     });
   }
 };
+
 
 export const deleteCartItem = async (req, res) => {
   try {

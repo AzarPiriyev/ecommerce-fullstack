@@ -44,33 +44,18 @@ const Filter = ({ updateSearchParams, page }) => {
     
     const fetchWriters = async () => {
       try {
-        const response = await fetch('http://localhost:3000/api/products');
-        
-        // Проверяем, успешно ли выполнен запрос
+        const response = await fetch('http://localhost:3000/api/products?limit=0');
         if (!response.ok) throw new Error('Failed to fetch products');
-    
-        const data = await response.json(); // Получаем JSON-ответ
-    
-        // Убедитесь, что products - это массив
-        const products = data.products; // Извлекаем массив products
-    
-        if (!Array.isArray(products)) {
-          console.error('Fetched data is not an array:', products);
-          return; // Завершаем выполнение, если products не является массивом
-        }
-    
-        // Получаем уникальных писателей
-        const uniqueWriters = [...new Set(products
-          .filter(product => product.writer)
-          .map(product => product.writer)
-        )];
-    
+        
+        const data = await response.json();
+        const products = data.products;
+        const uniqueWriters = [...new Set(products.map(product => product.writer))];
         setWriters(uniqueWriters);
-        console.log(uniqueWriters);
       } catch (error) {
         console.error('Error fetching writers:', error);
       }
     };
+    
     
 
     fetchCategories();

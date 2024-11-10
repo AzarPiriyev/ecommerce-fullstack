@@ -13,6 +13,7 @@ import informRoutes from './routes/inform.routes.js';
 import searchRoutes from './routes/search.routes.js';
 import authRoutes from './routes/auth.routes.js';
 import cartRoutes from './routes/cart.routes.js';
+import wishlistRoutes from './routes/wishlist.routes.js';
 
 
 const server = express();  // `server` olarak adlandırılmış
@@ -39,6 +40,7 @@ server.use('/api/informs', informRoutes);
 server.use('/api/search', searchRoutes);
 server.use('/api/auth', authRoutes);
 server.use('/api/cart', cartRoutes);
+server.use('/api/wishlist', wishlistRoutes);
 
 
 

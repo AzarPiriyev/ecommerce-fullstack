@@ -1,4 +1,4 @@
-import {create} from 'zustand';
+import { create } from 'zustand';
 import axios from 'axios';
 
 const useCartStore = create((set) => ({
@@ -13,7 +13,7 @@ const useCartStore = create((set) => ({
       const response = await axios.get(`http://localhost:3000/api/cart/get/${userId}`);
       const itemsWithQuantity = response.data.data.items.map(item => ({
         ...item,
-        quantity: item.quantity // устанавливаем значение по умолчанию, если quantity отсутствует
+        quantity: item.quantity || 1 // quantity yoksa varsayılan olarak 1 koyuyoruz
       }));
       set({ cart: itemsWithQuantity, isLoading: false });
     } catch (error) {
@@ -25,22 +25,19 @@ const useCartStore = create((set) => ({
   addToCart: async (userId, productId, quantity) => {
     set({ isLoading: true, error: null });
     try {
-      // Backend'e istek gönderme
       const response = await axios.post('http://localhost:3000/api/cart/add', {
         userId,
-         productId, quantity 
+        productId,
+        quantity 
       });
-  
-      // Sepet state'ini güncelleme
       set((state) => ({
-        cart: { ...state.cart, response },
+        cart: [...state.cart, response.data],
         isLoading: false,
       }));
     } catch (error) {
       set({ error: error.message, isLoading: false });
     }
   },
-  
 
   // Sepetteki ürünü güncellemek
   updateCartItemQty: async (userId, productId, quantity) => {
@@ -52,12 +49,9 @@ const useCartStore = create((set) => ({
         quantity,
       });
       set((state) => ({
-        cart: {
-          ...state.cart,
-          items: state.cart.items.map((item) =>
-            item.productId === productId ? { ...item, quantity } : item
-          ),
-        },
+        cart: state.cart.map((item) =>
+          item.productId === productId ? { ...item, quantity } : item
+        ),
         isLoading: false,
       }));
     } catch (error) {
@@ -71,16 +65,14 @@ const useCartStore = create((set) => ({
     try {
       await axios.delete(`http://localhost:3000/api/cart/${userId}/${productId}`);
       set((state) => ({
-        cart: {
-          ...state.cart,
-          items: state.cart.items.filter((item) => item.productId !== productId),
-        },
+        cart: state.cart.filter((item) => item.productId !== productId),
         isLoading: false,
       }));
     } catch (error) {
       set({ error: error.message, isLoading: false });
     }
   },
+  
 }));
 
 export default useCartStore;

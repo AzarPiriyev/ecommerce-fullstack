@@ -9,19 +9,26 @@ const ProductsAdmin = () => {
   const [isAddModalOpen, setIsAddModalOpen] = useState(false);
   const [isEditModalOpen, setIsEditModalOpen] = useState(false);
   const [selectedProduct, setSelectedProduct] = useState(null);
+  const [currentPage, setCurrentPage] = useState(1);
+  const [totalPages, setTotalPages] = useState(1);
+  const itemsPerPage = 10;
 
-  // Fetch products from backend API
+  // Fetch products from backend API with pagination
+  const fetchProducts = async (page = 1) => {
+    try {
+      const response = await axios.get('http://localhost:3000/api/products', {
+        params: { page, limit: itemsPerPage },
+      });
+      setProducts(response.data.products);
+      setTotalPages(response.data.totalPages);
+    } catch (error) {
+      console.error('Error fetching products:', error);
+    }
+  };
+
   useEffect(() => {
-    const fetchProducts = async () => {
-      try {
-        const response = await axios.get('http://localhost:3000/api/products');
-        setProducts(response.data.products);
-      } catch (error) {
-        console.error('Error fetching products:', error);
-      }
-    };
-    fetchProducts();
-  }, []);
+    fetchProducts(currentPage);
+  }, [currentPage]);
 
   // Handlers for Add Product modal
   const handleOpenAddModal = () => {
@@ -43,12 +50,7 @@ const ProductsAdmin = () => {
 
   // Update products after adding/editing
   const handleUpdateProducts = async () => {
-    try {
-      const response = await axios.get('http://localhost:3000/api/products');
-      setProducts(response.data);
-    } catch (error) {
-      console.error('Error updating products:', error);
-    }
+    await fetchProducts(currentPage); // Refresh the current page after an update
   };
 
   // Delete a product
@@ -59,6 +61,14 @@ const ProductsAdmin = () => {
     } catch (error) {
       console.error('Error deleting product:', error);
     }
+  };
+
+  // Pagination handlers
+  const handleNextPage = () => {
+    if (currentPage < totalPages) setCurrentPage(currentPage + 1);
+  };
+  const handlePrevPage = () => {
+    if (currentPage > 1) setCurrentPage(currentPage - 1);
   };
 
   return (
@@ -127,6 +137,25 @@ const ProductsAdmin = () => {
               ))}
             </tbody>
           </table>
+        </div>
+
+        {/* Pagination Controls */}
+        <div className="flex justify-between items-center mt-4">
+          <button
+            onClick={handlePrevPage}
+            disabled={currentPage === 1}
+            className="px-4 py-2 bg-gray-300 text-gray-700 rounded-md disabled:opacity-50">
+            Previous
+          </button>
+          <span className="text-gray-600">
+            Page {currentPage} of {totalPages}
+          </span>
+          <button
+            onClick={handleNextPage}
+            disabled={currentPage === totalPages}
+            className="px-4 py-2 bg-gray-300 text-gray-700 rounded-md disabled:opacity-50">
+            Next
+          </button>
         </div>
       </div>
 

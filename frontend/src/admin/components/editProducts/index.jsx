@@ -17,6 +17,7 @@ const EditProducts = ({ product, onClose, onUpdate }) => {
   const [file, setFile] = useState(null);
   const [preview, setPreview] = useState(null);
   const [isCreating, setIsCreating] = useState(!product);
+  const [categories, setCategories] = useState([]);
 
   useEffect(() => {
     if (product) {
@@ -37,6 +38,19 @@ const EditProducts = ({ product, onClose, onUpdate }) => {
       setIsCreating(true);
     }
   }, [product]);
+
+  useEffect(() => {
+    const fetchCategories = async () => {
+      try {
+        const response = await axios.get('http://localhost:3000/api/categories');
+        setCategories(response.data);
+      } catch (error) {
+        console.error('Error fetching categories:', error);
+      }
+    };
+    fetchCategories();
+  }, []);
+
 
   const handleChange = (e) => {
     const { name, value, type, checked } = e.target;
@@ -122,19 +136,26 @@ const EditProducts = ({ product, onClose, onUpdate }) => {
             placeholder="Price"
             className="border border-gray-300 p-3 mb-4 rounded-lg w-full focus:outline-none focus:ring-2 focus:ring-blue-500"
           />
+          <form onSubmit={handleSubmit}>
+         
           <select
             name="category"
             value={formData.category}
             onChange={handleChange}
             className="border border-gray-300 p-3 mb-4 rounded-lg w-full focus:outline-none focus:ring-2 focus:ring-blue-500"
           >
-            <option value="" disabled>Select Category</option>
-            <option value="history">History</option>
-            <option value="literature">Literature</option>
-            <option value="economy">Economy</option>
-            <option value="psychology">Psychology</option>
-            <option value="children">Children's Books</option>
+            <option value="" disabled>
+              Select Category
+            </option>
+            {categories.map((category) => (
+              <option key={category._id} value={category._id}>
+                {category.name}
+              </option>
+            ))}
           </select>
+
+          
+        </form>
           <select
             name="rating"
             value={formData.rating}

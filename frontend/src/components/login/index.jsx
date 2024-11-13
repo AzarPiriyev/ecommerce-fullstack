@@ -2,18 +2,19 @@ import React, { useState, useEffect } from 'react';
 import Container from '../common/container';
 import { Link, useNavigate } from 'react-router-dom';
 import axios from 'axios';
+import { FaEye, FaEyeSlash } from 'react-icons/fa';
 
 const Login = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const [showPassword, setShowPassword] = useState(false);
   const [error, setError] = useState('');
   const navigate = useNavigate();
 
   useEffect(() => {
-    // Check if the user is already logged in when the page reloads
     const user = localStorage.getItem('user');
     if (user) {
-      navigate('/'); // Redirect to homepage if user is already logged in
+      navigate('/');
     }
   }, [navigate]);
 
@@ -27,15 +28,10 @@ const Login = () => {
       const { token, user } = response.data;
 
       if (token) {
-        // Save user and token to localStorage
         localStorage.setItem('user', JSON.stringify(user));
         localStorage.setItem('token', token);
-
-        // Clear any previous error
         setError('');
-
-        // Reload the page to reflect login status
-        window.location.reload(); // This will trigger the useEffect and redirect
+        window.location.reload();
       } else {
         setError('Invalid email or password');
       }
@@ -57,13 +53,21 @@ const Login = () => {
             onChange={(e) => setEmail(e.target.value)}
             className="w-full px-4 py-3 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-[#ff5100]" 
           />
-          <input 
-            type="password" 
-            placeholder="Password" 
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
-            className="w-full px-4 py-3 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-[#ff5100]" 
-          />
+          <div className="relative">
+            <input 
+              type={showPassword ? "text" : "password"} 
+              placeholder="Password" 
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+              className="w-full px-4 py-3 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-[#ff5100]" 
+            />
+            <div 
+              onClick={() => setShowPassword(!showPassword)} 
+              className="absolute right-3 top-4 cursor-pointer text-gray-500"
+            >
+              {showPassword ? <FaEyeSlash /> : <FaEye />}
+            </div>
+          </div>
           {error && <p className="text-red-600 text-sm">{error}</p>}
           <button 
             onClick={handleLogin}

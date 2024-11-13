@@ -1,13 +1,13 @@
-// EditFAQ.js
+
 import React, { useState, useEffect } from 'react';
-import axios from 'axios'; // Import axios
+import axios from 'axios'; 
 
 const EditFAQ = ({ toggleModal, onEdit, faq }) => {
   const [title, setTitle] = useState('');
   const [description, setDescription] = useState('');
   const [isLoading, setIsLoading] = useState(false);
 
-  // Populate the fields with the current FAQ data
+  
   useEffect(() => {
     if (faq) {
       setTitle(faq.title);
@@ -22,12 +22,12 @@ const EditFAQ = ({ toggleModal, onEdit, faq }) => {
     const updatedFAQ = { title, description };
 
     try {
-      // Send a PUT request to update the FAQ
+      
       const response = await axios.put(`http://localhost:3000/api/faqs/${faq._id}`, updatedFAQ);
       console.log('Updated FAQ:', response.data);
 
-      onEdit(response.data); // Call the callback to update the FAQ list
-      toggleModal(); // Close the modal
+      onEdit(response.data); 
+      toggleModal(); 
     } catch (error) {
       console.error('Error updating FAQ:', error);
     } finally {

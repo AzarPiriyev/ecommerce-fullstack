@@ -1,6 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import { IoFilterSharp } from 'react-icons/io5';
 import { useNavigate } from 'react-router-dom';
+import axios from 'axios';
+
 
 const Filter = ({ updateSearchParams, page }) => {
   const navigate = useNavigate();
@@ -14,33 +16,13 @@ const Filter = ({ updateSearchParams, page }) => {
   useEffect(() => {
     const fetchCategories = async () => {
       try {
-        const response = await fetch('http://localhost:3000/api/products');
-        
-        // Проверяем, успешно ли выполнен запрос
-        if (!response.ok) throw new Error('Failed to fetch products');
-    
-        const data = await response.json(); // Получаем JSON-ответ
-    
-        // Убедитесь, что products - это массив
-        const products = data.products; // Извлекаем массив products
-    
-        if (!Array.isArray(products)) {
-          console.error('Fetched data is not an array:', products);
-          return; // Завершаем выполнение, если products не является массивом
-        }
-    
-        // Получаем уникальные категории
-        const uniqueCategories = [...new Set(products
-          .filter(product => product.category)
-          .map(product => product.category)
-        )];
-    
-        setCategories(uniqueCategories);
-        console.log(uniqueCategories);
+        const response = await axios.get('http://localhost:3000/api/categories');
+        setCategories(response.data); 
       } catch (error) {
         console.error('Error fetching categories:', error);
       }
     };
+    
     
     const fetchWriters = async () => {
       try {
@@ -112,6 +94,7 @@ const Filter = ({ updateSearchParams, page }) => {
     // Refresh the page
     window.location.reload();
   };
+  
 
   return (
     <div className='mt-[20px] '>
@@ -128,15 +111,15 @@ const Filter = ({ updateSearchParams, page }) => {
         <ul className='mb-[20px]'>
           <p className='text-[16px] text-[#2f2f2f] font-medium py-[7px]'>Categories</p>
           <div className='max-h-[180px] overflow-y-auto'>
-            {categories.map((category, index) => (
-              <li 
-                key={index} 
-                className={`text-[14px] text-[#2f2f2f] font-normal py-[7px] cursor-pointer capitalize hover:text-[#ff5100] transition ${selectedCategoryId === category ? 'text-[#ff5100]' : ''}`}
-                onClick={() => handleCategoryClick(category)}
-              >
-                {category}
-              </li>
-            ))}
+          {categories.map((category) => (
+  <li 
+    key={category._id} 
+    className={`text-[14px] text-[#2f2f2f] font-normal py-[7px] cursor-pointer capitalize hover:text-[#ff5100] transition ${selectedCategoryId === category._id ? 'text-[#ff5100]' : ''}`}
+    onClick={() => handleCategoryClick(category._id)}
+  >
+    {category.name}
+  </li>
+))}
           </div>
         </ul>
         

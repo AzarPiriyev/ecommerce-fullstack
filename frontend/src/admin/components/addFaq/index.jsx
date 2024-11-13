@@ -1,34 +1,34 @@
 import React, { useState } from 'react';
-import axios from 'axios'; // Axios'ı içe aktar
+import axios from 'axios'; 
 
 const AddFAQ = ({ toggleModal, onAdd }) => {
-  const [title, setTitle] = useState(''); // Updated to use title instead of question
-  const [description, setDescription] = useState(''); // Updated to use description instead of answer
+  const [title, setTitle] = useState(''); 
+  const [description, setDescription] = useState(''); 
   const [isLoading, setIsLoading] = useState(false);
 
   const handleSave = async (e) => {
     e.preventDefault();
     setIsLoading(true);
 
-    const newFAQ = { title, description }; // Create the FAQ object with correct properties
+    const newFAQ = { title, description }; 
 
     try {
-      // Send a POST request to the backend
+      
       const response = await axios.post('http://localhost:3000/api/faqs', newFAQ);
       
-      console.log('Added FAQ:', response.data); // Log the response from the server
+      console.log('Added FAQ:', response.data); 
 
-      onAdd(response.data); // Call the callback to update the FAQ list with the new data
-      toggleModal(); // Close the modal
+      onAdd(response.data); 
+      toggleModal(); 
     } catch (error) {
-      // Log detailed error messages
+      
       if (error.response) {
-        console.error('Error adding FAQ:', error.response.data); // Log the server response
+        console.error('Error adding FAQ:', error.response.data); 
       } else {
-        console.error('Error adding FAQ:', error.message); // Log the error message
+        console.error('Error adding FAQ:', error.message); 
       }
     } finally {
-      setIsLoading(false); // Reset loading state
+      setIsLoading(false); 
     }
   };
 
@@ -45,7 +45,7 @@ const AddFAQ = ({ toggleModal, onAdd }) => {
               type="text"
               id="title"
               value={title}
-              onChange={(e) => setTitle(e.target.value)} // Update title state
+              onChange={(e) => setTitle(e.target.value)} 
               className="w-full px-3 py-2 border rounded-md focus:outline-none focus:ring focus:ring-blue-200"
               required
             />
@@ -57,7 +57,7 @@ const AddFAQ = ({ toggleModal, onAdd }) => {
             <textarea
               id="description"
               value={description}
-              onChange={(e) => setDescription(e.target.value)} // Update description state
+              onChange={(e) => setDescription(e.target.value)} 
               className="w-full px-3 py-2 border rounded-md focus:outline-none focus:ring focus:ring-blue-200"
               required
             />

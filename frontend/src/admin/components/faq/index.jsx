@@ -23,10 +23,10 @@ const FAQs = () => {
   const handleDeleteFAQ = async (faq) => {
     console.log('Delete FAQ clicked', faq);
     try {
-      // Send a DELETE request to remove the FAQ
+ 
       await axios.delete(`http://localhost:3000/api/faqs/${faq._id}`);
       
-      // Update the FAQ list by filtering out the deleted FAQ
+  
       setFaqs((prev) => prev.filter((item) => item._id !== faq._id));
       
       console.log('FAQ deleted successfully');

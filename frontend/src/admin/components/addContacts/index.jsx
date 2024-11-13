@@ -7,18 +7,18 @@ const AddContacts = ({ toggleModal, onUpdate }) => {
   const [isLoading, setIsLoading] = useState(false);
 
   const handleSave = (e) => {
-    e.preventDefault(); // Formun sayfayı yenilemesini önle
+    e.preventDefault(); 
     setIsLoading(true);
     const contactData = { phone, adress };
 
-    // Axios ile POST isteği gönder
+    
     axios.post('http://localhost:3000/api/contacts', contactData)
       .then(() => {
-        onUpdate(); // Kontakları güncelle
-        toggleModal(); // Modali kapat
+        onUpdate(); 
+        toggleModal(); 
       })
       .catch(error => console.error('Error saving contact:', error))
-      .finally(() => setIsLoading(false)); // Yükleniyor durumunu kapat
+      .finally(() => setIsLoading(false)); 
   };
 
   return (
@@ -34,9 +34,9 @@ const AddContacts = ({ toggleModal, onUpdate }) => {
               type="text"
               id="address"
               value={adress}
-              onChange={(e) => setAddress(e.target.value)} // Input değeri değiştikçe durumu güncelle
+              onChange={(e) => setAddress(e.target.value)} 
               className="w-full px-3 py-2 border rounded-md focus:outline-none focus:ring focus:ring-blue-200"
-              required // Zorunlu alan
+              required 
             />
           </div>
           <div className="mb-4">
@@ -47,9 +47,9 @@ const AddContacts = ({ toggleModal, onUpdate }) => {
               type="text"
               id="phone"
               value={phone}
-              onChange={(e) => setPhone(e.target.value)} // Input değeri değiştikçe durumu güncelle
+              onChange={(e) => setPhone(e.target.value)} 
               className="w-full px-3 py-2 border rounded-md focus:outline-none focus:ring focus:ring-blue-200"
-              required // Zorunlu alan
+              required 
             />
           </div>
           <div className="flex justify-end gap-2">
@@ -62,9 +62,9 @@ const AddContacts = ({ toggleModal, onUpdate }) => {
             <button
               type="submit"
               className="bg-blue-500 text-white py-2 px-4 rounded-md hover:bg-blue-600 transition duration-300"
-              disabled={isLoading} // Yüklenirken butonu devre dışı bırak
+              disabled={isLoading} 
             >
-              {isLoading ? 'Saving...' : 'Save'} {/* Yüklenirken buton metnini değiştir */}
+              {isLoading ? 'Saving...' : 'Save'} 
             </button>
           </div>
         </form>

@@ -1,4 +1,3 @@
-// src/components/AddInformModal.js
 
 import React, { useState } from 'react';
 import axios from 'axios';
@@ -8,10 +7,10 @@ const AddInformModal = ({ isOpen, onClose, onInformAdded }) => {
     title: '',
     description: '',
     content: '',
-    code: '', // This will hold the selected option
+    code: '', 
   });
   
-  const [error, setError] = useState(null); // State for error handling
+  const [error, setError] = useState(null); 
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -20,11 +19,11 @@ const AddInformModal = ({ isOpen, onClose, onInformAdded }) => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    setError(null); // Reset error state before making request
+    setError(null); 
     try {
       const response = await axios.post('http://localhost:3000/api/informs', formData);
-      onInformAdded(response.data); // Callback to update the list of informs
-      onClose(); // Close the modal after successful submission
+      onInformAdded(response.data); 
+      onClose(); 
     } catch (error) {
       setError('Error adding inform: ' + error.response?.data?.error || error.message);
       console.error('Error adding inform:', error);
@@ -37,7 +36,7 @@ const AddInformModal = ({ isOpen, onClose, onInformAdded }) => {
     <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50">
       <div className="bg-white rounded-lg shadow-lg w-96 p-6">
         <h3 className="text-2xl font-semibold mb-4">Add New Inform</h3>
-        {error && <div className="text-red-500 mb-4">{error}</div>} {/* Display error message */}
+        {error && <div className="text-red-500 mb-4">{error}</div>} 
         <form onSubmit={handleSubmit}>
           <div className="mb-4">
             <label className="block text-gray-700 text-sm font-semibold mb-2" htmlFor="title">

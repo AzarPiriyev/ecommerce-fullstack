@@ -13,17 +13,17 @@ const AddCategory = ({ toggleModal, onAdd }) => {
     setFile(selectedFile);
     setPreview(URL.createObjectURL(selectedFile));
 
-    // Upload to Cloudinary
+    
     const formData = new FormData();
     formData.append('file', selectedFile);
-    formData.append('upload_preset', 'qslbztwu'); // Replace with your Cloudinary preset
+    formData.append('upload_preset', 'qslbztwu'); 
 
     try {
       const res = await axios.post(
-        'https://api.cloudinary.com/v1_1/dfdds09gi/image/upload', // Replace with your Cloudinary cloud name
+        'https://api.cloudinary.com/v1_1/dfdds09gi/image/upload', 
         formData
       );
-      setImageUrl(res.data.secure_url); // Store the uploaded image URL
+      setImageUrl(res.data.secure_url); 
     } catch (error) {
       console.error('Error uploading image:', error);
     }

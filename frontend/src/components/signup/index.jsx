@@ -1,15 +1,17 @@
 import React, { useState } from 'react';
 import Container from '../common/container';
-import { Link, useNavigate } from 'react-router-dom'; // useNavigate'yi import et
+import { Link, useNavigate } from 'react-router-dom';
 import axios from 'axios';
+import { FaEye, FaEyeSlash } from 'react-icons/fa';
 
 const Signup = () => {
   const [fullName, setFullName] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const [showPassword, setShowPassword] = useState(false);
   const [error, setError] = useState('');
-  
-  const navigate = useNavigate(); // useNavigate hook'u ile yönlendirme
+
+  const navigate = useNavigate();
 
   const handleSignup = async () => {
     if (password.length < 8) {
@@ -20,7 +22,6 @@ const Signup = () => {
     try {
       await axios.post('http://localhost:3000/api/auth/signup', { fullName, email, password });
       setError('');
-      // Başarılı kayıttan sonra login sayfasına yönlendir
       navigate('/login');
     } catch (err) {
       console.error('Error signing up:', err);
@@ -47,13 +48,21 @@ const Signup = () => {
             onChange={(e) => setEmail(e.target.value)}
             className="w-full px-4 py-3 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-[#ff5100]"
           />
-          <input 
-            type="password" 
-            placeholder="Password" 
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
-            className="w-full px-4 py-3 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-[#ff5100]"
-          />
+          <div className="relative">
+            <input 
+              type={showPassword ? "text" : "password"} 
+              placeholder="Password" 
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+              className="w-full px-4 py-3 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-[#ff5100]"
+            />
+            <div 
+              onClick={() => setShowPassword(!showPassword)} 
+              className="absolute right-3 top-4 cursor-pointer text-gray-500"
+            >
+              {showPassword ? <FaEyeSlash /> : <FaEye />}
+            </div>
+          </div>
           {error && <p className="text-red-600 text-sm">{error}</p>}
           <button 
             onClick={handleSignup}

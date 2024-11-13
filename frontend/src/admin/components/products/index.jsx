@@ -6,6 +6,7 @@ import EditProducts from '../editProducts';
 
 const ProductsAdmin = () => {
   const [products, setProducts] = useState([]);
+  const [categories, setCategories] = useState([]); 
   const [isAddModalOpen, setIsAddModalOpen] = useState(false);
   const [isEditModalOpen, setIsEditModalOpen] = useState(false);
   const [selectedProduct, setSelectedProduct] = useState(null);
@@ -13,7 +14,7 @@ const ProductsAdmin = () => {
   const [totalPages, setTotalPages] = useState(1);
   const itemsPerPage = 10;
 
-  // Fetch products from backend API with pagination
+  
   const fetchProducts = async (page = 1) => {
     try {
       const response = await axios.get('http://localhost:3000/api/products', {
@@ -26,19 +27,24 @@ const ProductsAdmin = () => {
     }
   };
 
+
+  const fetchCategories = async () => {
+    try {
+      const response = await axios.get('http://localhost:3000/api/categories');
+      setCategories(response.data); 
+    } catch (error) {
+      console.error('Error fetching categories:', error);
+    }
+  };
+
   useEffect(() => {
     fetchProducts(currentPage);
+    fetchCategories(); 
   }, [currentPage]);
 
-  // Handlers for Add Product modal
-  const handleOpenAddModal = () => {
-    setIsAddModalOpen(true);
-  };
-  const handleCloseAddModal = () => {
-    setIsAddModalOpen(false);
-  };
+  const handleOpenAddModal = () => setIsAddModalOpen(true);
+  const handleCloseAddModal = () => setIsAddModalOpen(false);
 
-  // Handlers for Edit Product modal
   const handleOpenEditModal = (product) => {
     setSelectedProduct(product);
     setIsEditModalOpen(true);
@@ -48,22 +54,19 @@ const ProductsAdmin = () => {
     setSelectedProduct(null);
   };
 
-  // Update products after adding/editing
   const handleUpdateProducts = async () => {
-    await fetchProducts(currentPage); // Refresh the current page after an update
+    await fetchProducts(currentPage);
   };
 
-  // Delete a product
   const handleDeleteProduct = async (productId) => {
     try {
       await axios.delete(`http://localhost:3000/api/products/${productId}`);
-      handleUpdateProducts(); // Update products list after deletion
+      handleUpdateProducts();
     } catch (error) {
       console.error('Error deleting product:', error);
     }
   };
 
-  // Pagination handlers
   const handleNextPage = () => {
     if (currentPage < totalPages) setCurrentPage(currentPage + 1);
   };
@@ -71,16 +74,19 @@ const ProductsAdmin = () => {
     if (currentPage > 1) setCurrentPage(currentPage - 1);
   };
 
+  
+  const getCategoryName = (categoryId) => {
+    const category = categories.find((cat) => cat._id === categoryId);
+    return category ? category.name : 'Unknown';
+  };
+
   return (
     <div className='flex min-h-screen bg-gray-100'>
-      {/* Navigation Sidebar */}
       <div className='bg-gray-900 text-white w-[250px] p-6'>
         <Navigation />
       </div>
 
-      {/* Main Content Area */}
       <div className='w-full p-8'>
-        {/* Page Header */}
         <div className='flex justify-between items-center mb-8'>
           <h2 className='text-3xl font-semibold text-gray-800'>Products</h2>
           <button
@@ -90,7 +96,7 @@ const ProductsAdmin = () => {
           </button>
         </div>
 
-        {/* Products Table */}
+       
         <div className="overflow-x-auto rounded-lg shadow-lg">
           <table className="min-w-full bg-white border border-gray-200 rounded-lg">
             <thead>
@@ -110,7 +116,7 @@ const ProductsAdmin = () => {
                   <td className="py-3 px-6 text-left">{product.name}</td>
                   <td className="py-3 px-6 text-left">{product.writer}</td>
                   <td className="py-3 px-6 text-left">${product.price}</td>
-                  <td className="py-3 px-6 text-left">{product.category}</td>
+                  <td className="py-3 px-6 text-left">{getCategoryName(product.category)}</td> 
                   <td className="py-3 px-6 text-left">
                     <img
                       src={product.imageUrl}
@@ -139,7 +145,7 @@ const ProductsAdmin = () => {
           </table>
         </div>
 
-        {/* Pagination Controls */}
+       
         <div className="flex justify-between items-center mt-4">
           <button
             onClick={handlePrevPage}
@@ -159,10 +165,10 @@ const ProductsAdmin = () => {
         </div>
       </div>
 
-      {/* AddProducts Modal */}
+    
       {isAddModalOpen && <AddProducts onClose={handleCloseAddModal} onUpdate={handleUpdateProducts} />}
 
-      {/* EditProducts Modal */}
+     
       {isEditModalOpen && selectedProduct && (
         <EditProducts
           product={selectedProduct}

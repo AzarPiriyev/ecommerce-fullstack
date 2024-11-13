@@ -1,8 +1,14 @@
 import React, { useEffect, useState } from 'react';
 import Container from '../common/container';
+import { useNavigate } from 'react-router-dom';
 
 const Categories = () => {
   const [categories, setCategories] = useState([]);
+  const navigate = useNavigate();
+
+  const handleCategoryClick = (categoryId) => {
+    navigate(`/products?category=${categoryId}`);
+  };
 
   useEffect(() => {
     const fetchCategories = async () => {
@@ -38,7 +44,7 @@ const Categories = () => {
             />
             <div className="p-4">
               <h3 className="text-xl font-semibold text-gray-800">{category.name}</h3>
-              <button className="mt-4 bg-[#ff5100] text-white py-2 px-4 rounded-lg hover:bg-[#ff5100] transition duration-300">
+              <button onClick={() => handleCategoryClick(category._id)} className="mt-4 bg-[#ff5100] text-white py-2 px-4 rounded-lg hover:bg-[#ff5100] transition duration-300">
                 Explore {category.name}
               </button>
             </div>

@@ -14,18 +14,18 @@ const EditContact = ({ toggleModal, contact, onUpdate }) => {
   }, [contact]);
 
   const handleSave = async (e) => {
-    e.preventDefault(); // Formun sayfayı yenilemesini önle
+    e.preventDefault(); 
     setIsLoading(true);
     const contactData = { phone, adress };
 
     try {
       await axios.put(`http://localhost:3000/api/contacts/${contact._id}`, contactData);
-      onUpdate(); // Kontakları güncelle
-      toggleModal(); // Modali kapat
+      onUpdate(); 
+      toggleModal(); 
     } catch (error) {
       console.error('Error updating contact:', error);
     } finally {
-      setIsLoading(false); // Yükleniyor durumunu kapat
+      setIsLoading(false); 
     }
   };
 
@@ -42,9 +42,9 @@ const EditContact = ({ toggleModal, contact, onUpdate }) => {
               type="text"
               id="address"
               value={adress}
-              onChange={(e) => setAddress(e.target.value)} // Input değeri değiştikçe durumu güncelle
+              onChange={(e) => setAddress(e.target.value)} 
               className="w-full px-3 py-2 border rounded-md focus:outline-none focus:ring focus:ring-blue-200"
-              required // Zorunlu alan
+              required 
             />
           </div>
           <div className="mb-4">
@@ -55,9 +55,9 @@ const EditContact = ({ toggleModal, contact, onUpdate }) => {
               type="text"
               id="phone"
               value={phone}
-              onChange={(e) => setPhone(e.target.value)} // Input değeri değiştikçe durumu güncelle
+              onChange={(e) => setPhone(e.target.value)} 
               className="w-full px-3 py-2 border rounded-md focus:outline-none focus:ring focus:ring-blue-200"
-              required // Zorunlu alan
+              required 
             />
           </div>
           <div className="flex justify-end gap-2">

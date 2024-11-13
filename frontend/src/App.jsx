@@ -24,6 +24,7 @@ import CustomerSupportPages from './pages/customerSupportPages';
 import DeliveryDetailsPage from './pages/deliveryDetailsPage';
 import LoginPage from './pages/loginPage';
 import SignupPage from './pages/signupPage';
+import ProductsCategoriesPages from './pages/productsCategoriesPages';
 
 
 function App() {
@@ -54,6 +55,7 @@ function App() {
     <Route path="/deliverydetails" element={<DeliveryDetailsPage />} />
     <Route path="/login" element={<LoginPage />} />
     <Route path="/signup" element={<SignupPage />} />
+    <Route path="/products" element={<ProductsCategoriesPages/>} />
 
     {/* Admin Panel */}
     <Route path="/admin" element={<ProductsPage />} />

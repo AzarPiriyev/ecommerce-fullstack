@@ -33,8 +33,8 @@ const Inform = () => {
   };
 
   const handleEditInform = (inform) => {
-    setCurrentInform(inform); // Set the current inform to be edited
-    setIsEditModalOpen(true); // Open the edit modal
+    setCurrentInform(inform); 
+    setIsEditModalOpen(true); 
   };
 
   const handleInformUpdated = (updatedInform) => {
@@ -46,7 +46,7 @@ const Inform = () => {
   const handleDeleteInform = async (informId) => {
     try {
       await axios.delete(`http://localhost:3000/api/informs/${informId}`);
-      setInforms((prev) => prev.filter((inform) => inform._id !== informId)); // Remove the inform from the state
+      setInforms((prev) => prev.filter((inform) => inform._id !== informId)); 
     } catch (error) {
       console.error('Error deleting inform:', error);
     }
@@ -62,7 +62,7 @@ const Inform = () => {
         <h1 className='text-3xl font-bold text-gray-800 mb-6'>Informs Page</h1>
         <button
           className='bg-green-500 text-white px-4 py-2 rounded-md mb-6 hover:bg-green-600'
-          onClick={() => setIsModalOpen(true)} // Open add modal
+          onClick={() => setIsModalOpen(true)} 
         >
           Add Inform
         </button>
@@ -83,10 +83,10 @@ const Inform = () => {
 
         <div className='bg-white shadow-md rounded-lg'>
           {informs.map((inform, index) => (
-            <div key={index} className="mb-4"> {/* Add margin bottom for spacing */}
+            <div key={index} className="mb-4"> 
               <div
                 className='flex justify-between items-center p-4 cursor-pointer bg-gray-200 rounded-t-lg'
-                onClick={() => toggleAccordion(index)} // Toggle accordion
+                onClick={() => toggleAccordion(index)} 
               >
                 <h2 className='text-lg font-medium text-gray-800'>{inform.title}</h2>
                 <span className='text-gray-600'>{isAccordionOpen === index ? '-' : '+'}</span>
@@ -108,7 +108,7 @@ const Inform = () => {
                   <div className='flex justify-end gap-2'>
                     <button
                       className='bg-yellow-500 text-white px-3 py-1 rounded-md hover:bg-yellow-600'
-                      onClick={() => handleEditInform(inform)} // Open edit modal
+                      onClick={() => handleEditInform(inform)} 
                     >
                       Edit
                     </button>

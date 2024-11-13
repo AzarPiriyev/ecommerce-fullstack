@@ -4,12 +4,22 @@ import Filter from '../common/filter';
 import Container from '../common/container';
 import { GrBasket } from "react-icons/gr";
 import { Link, useLocation, useNavigate } from 'react-router-dom';
+import useCartStore from '../../store/cart';
 
 const TopSellings = () => {
   const [topSellingProducts, setTopSellingProducts] = useState([]);
   const [searchParams, setSearchParams] = useState({});
   const [totalPages, setTotalPages] = useState(1);
   const limit = 12;
+  const { addToCart } = useCartStore(); // Access the addToCart function
+  const [userId, setUserId] = useState(null);
+
+  useEffect(() => {
+    const user = JSON.parse(localStorage.getItem("user"));
+    if (user) {
+      setUserId(user._id);
+    }
+  }, []);
 
   const location = useLocation();
   const navigate = useNavigate();
@@ -45,6 +55,16 @@ const TopSellings = () => {
     navigate(`?page=${page}`);
   };
 
+  const handleAddToCart = (productId) => {
+    if (userId) {
+      const quantity = 1; // Default quantity
+      addToCart(userId, productId, quantity);
+      alert("Product added to cart!");
+    } else {
+      alert("Please log in to add products to the cart.");
+    }
+  };
+
   return (
     <Container>
       <div className="flex flex-col md:flex-row gap-8 mb-10">
@@ -61,7 +81,11 @@ const TopSellings = () => {
                   <p className="text-sm text-gray-500 overflow-hidden whitespace-nowrap text-ellipsis">{product.writer}</p>
                   <p className="text-md font-semibold text-[#2f2f2f] mb-3">${product.price}</p>
                   <div className="flex items-center justify-between">
-                    <button className="text-white bg-[#ff5100] py-1 px-3 rounded-lg text-sm font-semibold hover:bg-[#ff7833] transition duration-200 overflow-hidden whitespace-nowrap text-ellipsis">
+                    <button className="text-white bg-[#ff5100] py-1 px-3 rounded-lg text-sm font-semibold hover:bg-[#ff7833] transition duration-200 overflow-hidden whitespace-nowrap text-ellipsis"
+                    onClick={(e) => {
+                      e.preventDefault(); // Prevent link navigation
+                      handleAddToCart(product._id);
+                    }}>
                       Add to Cart
                     </button>
                     <GrBasket className="text-[#ff5100] text-xl" />

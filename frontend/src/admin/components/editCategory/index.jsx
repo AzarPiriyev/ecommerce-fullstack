@@ -1,4 +1,4 @@
-// EditCategory.js
+
 import React, { useState } from 'react';
 import axios from 'axios';
 
@@ -15,8 +15,8 @@ const EditCategory = ({ category, toggleEditModal, onUpdate }) => {
 
     try {
       const response = await axios.put(`http://localhost:3000/api/categories/${category._id}`, updatedCategory);
-      onUpdate(response.data); // Update the category list
-      toggleEditModal(); // Close the modal
+      onUpdate(response.data); 
+      toggleEditModal(); 
     } catch (error) {
       console.error('Error updating category:', error);
     } finally {

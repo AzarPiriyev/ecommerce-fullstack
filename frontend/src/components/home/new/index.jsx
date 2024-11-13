@@ -6,9 +6,19 @@ import { IoChevronBackOutline, IoChevronForwardOutline } from 'react-icons/io5';
 import "slick-carousel/slick/slick.css"; 
 import "slick-carousel/slick/slick-theme.css"; 
 import { Link } from 'react-router-dom';
+import useCartStore from '../../../store/cart';
 
 const New = () => {
   const [newArrivals, setNewArrivals] = useState([]);
+  const { addToCart } = useCartStore(); // Access the addToCart function
+  const [userId, setUserId] = useState(null);
+
+  useEffect(() => {
+    const user = JSON.parse(localStorage.getItem("user"));
+    if (user) {
+      setUserId(user._id);
+    }
+  }, []);
 
   useEffect(() => {
     const fetchNewArrivals = async (page = 1, limit = 6) => {
@@ -17,7 +27,7 @@ const New = () => {
         if (!response.ok) throw new Error('Failed to fetch products');
         
         const data = await response.json();
-        setNewArrivals(data.products || []); // Сохраняем только новые продукты
+        setNewArrivals(data.products || []);
       } catch (error) {
         console.error('Error fetching products:', error);
       }
@@ -74,6 +84,16 @@ const New = () => {
     ],
   };
 
+  const handleAddToCart = (productId) => {
+    if (userId) {
+      const quantity = 1; // Default quantity
+      addToCart(userId, productId, quantity);
+      alert("Product added to cart!");
+    } else {
+      alert("Please log in to add products to the cart.");
+    }
+  };
+
   return (
     <Container>
       <div className="relative mb-10">
@@ -87,11 +107,11 @@ const New = () => {
         <Slider {...settings}>
           {newArrivals.map((product) => (
             <Link to={`/product/${product._id}`} key={product._id} className="p-4">
-              <div className="shadow-lg rounded-lg overflow-hidden border-2 bg-white">
+              <div className="shadow-lg rounded-lg overflow-hidden bg-white">
                 <img 
                   src={product.imageUrl} 
                   alt={product.name} 
-                  className="h-48 w-40 mx-auto object-cover rounded-t-lg" 
+                  className="h-56 w-40 mx-auto object-cover rounded-t-lg" 
                 />
                 <div className="p-4">
                   <p className="text-lg font-semibold text-gray-700 overflow-hidden whitespace-nowrap text-ellipsis">
@@ -100,7 +120,13 @@ const New = () => {
                   <p className="text-sm text-gray-500">{product.author}</p>
                   <p className="text-md font-semibold text-[#2f2f2f] mb-3">${product.price}</p>
                   <div className="flex items-center justify-between">
-                    <button className="text-white bg-[#ff5100] py-1 px-3 rounded-lg text-sm font-semibold hover:bg-[#ff7833] transition duration-200">
+                    <button 
+                      className="text-white bg-[#ff5100] py-1 px-3 rounded-lg text-sm font-semibold hover:bg-[#ff7833] transition duration-200"
+                      onClick={(e) => {
+                        e.preventDefault(); // Prevent link navigation
+                        handleAddToCart(product._id);
+                      }}
+                    >
                       Add to Cart
                     </button>
                     <GrBasket className="text-[#ff5100] text-xl" />

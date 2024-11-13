@@ -2,17 +2,17 @@ import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import Navigation from '../navigation';
 import AddContacts from '../addContacts';
-import EditContact from '../editContacts'; // Yeni bileşeni içe aktar
+import EditContact from '../editContacts'; 
 
 const Contacts = () => {
   const [contacts, setContacts] = useState([]);
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const [contactToEdit, setContactToEdit] = useState(null); // Düzenlenecek kontaktı sakla
+  const [contactToEdit, setContactToEdit] = useState(null); 
   
   const toggleModal = () => {
     setIsModalOpen(!isModalOpen);
     if (isModalOpen) {
-      setContactToEdit(null); // Modal kapandığında contact'ı sıfırla
+      setContactToEdit(null); 
     }
   };
 
@@ -30,16 +30,16 @@ const Contacts = () => {
   }, []);
 
   const handleEditClick = (contact) => {
-    setContactToEdit(contact); // Düzenlemek için seçilen contact'ı ayarla
-    toggleModal(); // Modali aç
+    setContactToEdit(contact); 
+    toggleModal(); 
   };
 
-  // Silme fonksiyonu
+  
   const handleDeleteClick = async (contactId) => {
     if (window.confirm("Are you sure you want to delete this contact?")) {
       try {
         await axios.delete(`http://localhost:3000/api/contacts/${contactId}`);
-        fetchContacts(); // Kontakları güncelle
+        fetchContacts(); 
       } catch (error) {
         console.error('Error deleting contact:', error);
       }
@@ -52,7 +52,7 @@ const Contacts = () => {
         <Navigation />
       </div>
       <div className='w-full p-8'>
-        {/* Page Header */}
+        
         <div className='flex justify-between items-center mb-8'>
           <h2 className='text-3xl font-semibold text-gray-800'>Contacts</h2>
           <button
@@ -62,7 +62,7 @@ const Contacts = () => {
           </button>
         </div>
 
-        {/* Contacts Table */}
+      
         <div className="overflow-x-auto rounded-lg shadow-lg">
           <table className="min-w-full bg-white border border-gray-200 rounded-lg">
             <thead>
@@ -80,12 +80,12 @@ const Contacts = () => {
                   <td className="py-3 px-6 text-left">
                     <div className="flex gap-2">
                       <button
-                        onClick={() => handleEditClick(contact)} // Düzenleme butonuna tıklayınca düzenleme fonksiyonunu çağır
+                        onClick={() => handleEditClick(contact)} 
                         className='bg-yellow-400 text-white py-1 px-3 rounded-md hover:bg-yellow-500 transition duration-300 shadow-md'>
                         Edit
                       </button>
                       <button
-                        onClick={() => handleDeleteClick(contact._id)} // Silme fonksiyonu
+                        onClick={() => handleDeleteClick(contact._id)} 
                         className='bg-red-600 text-white py-1 px-3 rounded-md hover:bg-red-700 transition duration-300 shadow-md'>
                         Delete
                       </button>
@@ -97,12 +97,12 @@ const Contacts = () => {
           </table>
         </div>
 
-        {/* Add Contact Modal */}
+        
         {isModalOpen && !contactToEdit && (
           <AddContacts toggleModal={toggleModal} onUpdate={fetchContacts} />
         )}
 
-        {/* Edit Contact Modal */}
+        
         {isModalOpen && contactToEdit && (
           <EditContact toggleModal={toggleModal} contact={contactToEdit} onUpdate={fetchContacts} />
         )}

@@ -86,7 +86,7 @@ export const fetchCartItems = async (req, res) => {
       imageUrl: item.productId.imageUrl,
       name: item.productId.name,
       price: item.productId.price,
-      quantity: item.quantity, // Quantity bilgisi eklendi
+      quantity: item.quantity, 
     }));
 
     res.status(200).json({
@@ -148,7 +148,7 @@ export const updateCartItemQty = async (req, res) => {
       imageUrl: item.productId ? item.productId.imageUrl : null,
       name: item.productId ? item.productId.name : "Product not found",
       price: item.productId ? item.productId.price : null,
-      quantity: item.quantity, // Quantity bilgisi eklendi
+      quantity: item.quantity, 
     }));
 
     res.status(200).json({

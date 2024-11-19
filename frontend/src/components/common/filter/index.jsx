@@ -84,14 +84,14 @@ const Filter = ({ updateSearchParams, page }) => {
 
 
 
-  // Reset all filters and refresh the page
+  
   const handleReset = () => {
     setSelectedCategoryId('');
     setSelectedWriter('');
     updateSearchParams({});
     navigate(`/products/${page}`);
 
-    // Refresh the page
+    
     window.location.reload();
   };
   
@@ -109,7 +109,7 @@ const Filter = ({ updateSearchParams, page }) => {
         
         {/* Categories Section */}
         <ul className='mb-[20px]'>
-          <p className='text-[16px] text-[#2f2f2f] font-medium py-[7px]'>Categories</p>
+          <p className='text-[16px] text-[#2f2f2f] font-bold py-[7px]'>Categories</p>
           <div className='max-h-[180px] overflow-y-auto'>
           {categories.map((category) => (
   <li 
@@ -127,7 +127,7 @@ const Filter = ({ updateSearchParams, page }) => {
         
         {/* Writer Section */}
         <ul className='mb-[20px]'>
-          <p className='text-[16px] text-[#2f2f2f] font-medium py-[7px]'>Writer</p>
+          <p className='text-[16px] text-[#2f2f2f] font-bold py-[7px]'>Writer</p>
           <div className='max-h-[180px] overflow-y-auto'>
             {writers.length > 0 ? (
               writers.map((writer, index) => (

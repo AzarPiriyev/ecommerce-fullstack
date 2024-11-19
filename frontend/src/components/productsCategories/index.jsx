@@ -11,7 +11,7 @@ const ProductsCategories = () => {
   const [totalPages, setTotalPages] = useState(1);
   const limit = 12;
   const location = useLocation();
-  const { addToCart } = useCartStore(); // Access the addToCart function
+  const { addToCart } = useCartStore(); 
   const [userId, setUserId] = useState(null);
 
   useEffect(() => {
@@ -21,7 +21,7 @@ const ProductsCategories = () => {
     }
   }, []);
   
-  // URL'den kategori parametresini alıyoruz
+  
   const queryParams = new URLSearchParams(location.search);
   const category = queryParams.get('category');
 
@@ -51,7 +51,7 @@ const ProductsCategories = () => {
 
   const handleAddToCart = (productId) => {
     if (userId) {
-      const quantity = 1; // Default quantity
+      const quantity = 1; 
       addToCart(userId, productId, quantity);
       alert("Product added to cart!");
     } else {
@@ -74,7 +74,7 @@ const ProductsCategories = () => {
                 </Link>
                 <button className="flex items-center gap-2 text-orange-500 font-bold hover:text-orange-600"
                 onClick={(e) => {
-                    e.preventDefault(); // Prevent link navigation
+                    e.preventDefault(); 
                     handleAddToCart(product._id);
                   }}>
                   <span>Add to Cart</span>
@@ -87,7 +87,7 @@ const ProductsCategories = () => {
           )}
         </div>
 
-        {/* Pagination */}
+        
         <div className="flex gap-3 justify-center mt-8">
           {Array.from({ length: totalPages }, (_, index) => (
             <button

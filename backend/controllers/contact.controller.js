@@ -1,6 +1,6 @@
 import Contacts from '../models/contact.model.js';
 
-// Tüm contact bilgilerini listeleme
+
 export const getContacts = async (req, res) => {
   try {
     const contacts = await Contacts.find();
@@ -10,7 +10,7 @@ export const getContacts = async (req, res) => {
   }
 };
 
-// Tek bir contact bilgisini getirme
+
 export const getContactById = async (req, res) => {
   try {
     const contact = await Contacts.findById(req.params.id);
@@ -23,7 +23,7 @@ export const getContactById = async (req, res) => {
   }
 };
 
-// Yeni contact bilgisi ekleme
+
 export const createContact = async (req, res) => {
   const { phone, adress } = req.body;
 
@@ -40,7 +40,7 @@ export const createContact = async (req, res) => {
   }
 };
 
-// Contact bilgisini güncelleme
+
 export const updateContact = async (req, res) => {
   try {
     const updatedContact = await Contacts.findByIdAndUpdate(req.params.id, req.body, { new: true });
@@ -53,7 +53,7 @@ export const updateContact = async (req, res) => {
   }
 };
 
-// Contact bilgisini silme
+
 export const deleteContact = async (req, res) => {
   try {
     const deletedContact = await Contacts.findByIdAndDelete(req.params.id);

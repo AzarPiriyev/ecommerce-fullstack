@@ -27,9 +27,9 @@ const Wishlist = () => {
   const handleRemoveFromWishlist = (productId) => {
     if (userId) {
       removeWishlistItem(userId, productId);
-      alert("Wishlist'ten kaldırıldı.");
+      alert("Removed from Wishlist.");
     } else {
-      alert("Lütfen giriş yapın.");
+      alert("Please log in.");
     }
   };
 
@@ -70,7 +70,7 @@ const Wishlist = () => {
                 className="flex items-center gap-2 text-orange-500 font-bold hover:text-orange-600"
                 onClick={(e) => {
                   e.preventDefault();
-                  handleAddToCart(item.productId); // Corrected reference to productId
+                  handleAddToCart(item.productId); 
                 }}
               >
                 <span>Add to Cart</span>

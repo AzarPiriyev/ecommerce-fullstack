@@ -4,7 +4,7 @@ import axios from "axios";
 const useWishlistStore = create((set) => ({
   wishlist: [],
 
-  // Fetches the wishlist for a specific user
+  
   fetchWishlist: async (userId) => {
     try {
       const response = await axios.get(`http://localhost:3000/api/wishlist/${userId}`);
@@ -16,7 +16,7 @@ const useWishlistStore = create((set) => ({
 
   addWishlistItem: async (userId, productId) => {
     try {
-      console.log("Adding to wishlist:", { userId, productId }); // userId ve productId'yi kontrol et
+      console.log("Adding to wishlist:", { userId, productId }); 
       const response = await axios.post("http://localhost:3000/api/wishlist/add", { userId, productId });
       set((state) => ({
         wishlist: [...state.wishlist, response.data],
@@ -27,7 +27,7 @@ const useWishlistStore = create((set) => ({
   },
 
 
-  // Wishlist'ten ürün kaldır
+  
   removeWishlistItem: async (userId,productId) => {
     try {
       await axios.delete(`http://localhost:3000/api/wishlist/${userId}/${productId}`);

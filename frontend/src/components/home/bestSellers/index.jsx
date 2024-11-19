@@ -10,7 +10,7 @@ import useCartStore from '../../../store/cart';
 
 const BestSellers = () => {
   const [bestSellingProducts, setBestSellingProducts] = useState([]);
-  const { addToCart } = useCartStore(); // Access the addToCart function
+  const { addToCart } = useCartStore(); 
   const [userId, setUserId] = useState(null);
 
   useEffect(() => {
@@ -27,18 +27,18 @@ const BestSellers = () => {
         if (!response.ok) throw new Error('Failed to fetch products');
     
         const data = await response.json();
-        console.log('Fetched products:', data); // Логирование для отладки
+        console.log('Fetched products:', data); 
     
-        // Теперь извлекаем массив продуктов из data
-        const products = data.products; // Извлекаем массив продуктов
+        
+        const products = data.products; 
     
-        // Проверка, является ли products массивом
+        
         if (!Array.isArray(products)) {
-          console.error('Fetched data is not an array:', products); // Логируем, что это не массив
+          console.error('Fetched data is not an array:', products); 
           throw new Error('Fetched data is not an array');
         }
     
-        // Фильтрация продуктов, если это необходимо
+        
         const filteredProducts = products.filter(product => product.topSelling === true);
         setBestSellingProducts(filteredProducts);
       } catch (error) {
@@ -101,7 +101,7 @@ const BestSellers = () => {
 
   const handleAddToCart = (productId) => {
     if (userId) {
-      const quantity = 1; // Default quantity
+      const quantity = 1; 
       addToCart(userId, productId, quantity);
       alert("Product added to cart!");
     } else {
@@ -137,7 +137,7 @@ const BestSellers = () => {
                   <div className="flex items-center justify-between">
                     <button className="text-white bg-[#ff5100] py-1 px-3 rounded-lg text-sm font-semibold hover:bg-[#ff7833] transition duration-200"
                     onClick={(e) => {
-                      e.preventDefault(); // Prevent link navigation
+                      e.preventDefault(); 
                       handleAddToCart(product._id);
                     }}>
                       Add to Cart

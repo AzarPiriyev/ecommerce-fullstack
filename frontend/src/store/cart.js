@@ -2,44 +2,46 @@ import { create } from 'zustand';
 import axios from 'axios';
 
 const useCartStore = create((set) => ({
-  cart: [],
+  cart: JSON.parse(localStorage.getItem('cart')) || [],
   isLoading: false,
   error: null,
 
-  // Sepeti çekmek
+  
   fetchCart: async (userId) => {
     set({ isLoading: true, error: null });
     try {
       const response = await axios.get(`http://localhost:3000/api/cart/get/${userId}`);
       const itemsWithQuantity = response.data.data.items.map(item => ({
         ...item,
-        quantity: item.quantity || 1 // quantity yoksa varsayılan olarak 1 koyuyoruz
+        quantity: item.quantity || 1
       }));
       set({ cart: itemsWithQuantity, isLoading: false });
+      localStorage.setItem('cart', JSON.stringify(itemsWithQuantity)); 
     } catch (error) {
       set({ error: error.message, isLoading: false });
     }
   },
 
-  // Sepete ürün eklemek
+  
   addToCart: async (userId, productId, quantity) => {
     set({ isLoading: true, error: null });
     try {
       const response = await axios.post('http://localhost:3000/api/cart/add', {
         userId,
         productId,
-        quantity 
+        quantity
       });
-      set((state) => ({
-        cart: [...state.cart, response.data],
-        isLoading: false,
-      }));
+      set((state) => {
+        const newCart = [...state.cart, response.data];
+        localStorage.setItem('cart', JSON.stringify(newCart)); 
+        return { cart: newCart, isLoading: false };
+      });
     } catch (error) {
       set({ error: error.message, isLoading: false });
     }
   },
 
-  // Sepetteki ürünü güncellemek
+  
   updateCartItemQty: async (userId, productId, quantity) => {
     set({ isLoading: true, error: null });
     try {
@@ -48,31 +50,38 @@ const useCartStore = create((set) => ({
         productId,
         quantity,
       });
-      set((state) => ({
-        cart: state.cart.map((item) =>
+      set((state) => {
+        const updatedCart = state.cart.map((item) =>
           item.productId === productId ? { ...item, quantity } : item
-        ),
-        isLoading: false,
-      }));
+        );
+        localStorage.setItem('cart', JSON.stringify(updatedCart)); 
+        return { cart: updatedCart, isLoading: false };
+      });
     } catch (error) {
       set({ error: error.message, isLoading: false });
     }
   },
 
-  // Sepetten ürün silmek
+  
   removeCartItem: async (userId, productId) => {
     set({ isLoading: true, error: null });
     try {
       await axios.delete(`http://localhost:3000/api/cart/${userId}/${productId}`);
-      set((state) => ({
-        cart: state.cart.filter((item) => item.productId !== productId),
-        isLoading: false,
-      }));
+      set((state) => {
+        const updatedCart = state.cart.filter((item) => item.productId !== productId);
+        localStorage.setItem('cart', JSON.stringify(updatedCart)); 
+        return { cart: updatedCart, isLoading: false };
+      });
     } catch (error) {
       set({ error: error.message, isLoading: false });
     }
   },
+
   
+  setClose: () => {
+    set({ cart: [] }); 
+    localStorage.removeItem('cart'); 
+  }
 }));
 
 export default useCartStore;

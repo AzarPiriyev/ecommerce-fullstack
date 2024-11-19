@@ -11,7 +11,7 @@ const New = () => {
   const [searchParams, setSearchParams] = useState({});
   const [totalPages, setTotalPages] = useState(1);
   const limit = 12;
-  const { addToCart } = useCartStore(); // Access the addToCart function
+  const { addToCart } = useCartStore(); 
   const [userId, setUserId] = useState(null);
 
   useEffect(() => {
@@ -48,7 +48,7 @@ const New = () => {
 
   const updateSearchParams = (params) => {
     setSearchParams(prev => ({ ...prev, ...params }));
-    navigate(`?page=1`); // Reset to page 1 when filters are applied
+    navigate(`?page=1`); 
   };
 
   const handlePageChange = (page) => {
@@ -57,7 +57,7 @@ const New = () => {
 
   const handleAddToCart = (productId) => {
     if (userId) {
-      const quantity = 1; // Default quantity
+      const quantity = 1; 
       addToCart(userId, productId, quantity);
       alert("Product added to cart!");
     } else {
@@ -84,7 +84,7 @@ const New = () => {
                   <div className="flex items-center justify-between">
                     <button className="text-white bg-[#ff5100] py-1 px-3 rounded-lg text-sm font-semibold hover:bg-[#ff7833] transition duration-200 overflow-hidden whitespace-nowrap text-ellipsis"
                     onClick={(e) => {
-                      e.preventDefault(); // Prevent link navigation
+                      e.preventDefault(); 
                       handleAddToCart(product._id);
                     }}>
                       Add to Cart
@@ -96,7 +96,7 @@ const New = () => {
             ))}
           </div>
 
-          {/* Pagination */}
+          
           <div className="flex gap-3 justify-center mt-8">
             {Array.from({ length: totalPages }, (_, index) => (
               <button 

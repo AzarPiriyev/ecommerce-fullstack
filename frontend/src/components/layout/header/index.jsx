@@ -17,20 +17,35 @@ const Header = () => {
     const [foundProducts, setFoundProducts] = useState([]);
     const [keyword, setKeyword] = useState('');
     const [isLoggedIn, setIsLoggedIn] = useState(false);
-    const [isAdmin, setIsAdmin] = useState(false); // To track if the user is an admin
+    const [isAdmin, setIsAdmin] = useState(false); 
     const navigate = useNavigate();
     const [wishlistCount, setWishlistCount] = useState(0);
-    const { wishlist } = useWishlistStore(); // Access wishlist from store
+    const { wishlist } = useWishlistStore(); 
     const [cartCount, setCartCount] = useState(0);
-    const { cart } = useCartStore();
+    const { cart} = useCartStore();
+
 
     useEffect(() => {
-        setWishlistCount(wishlist.length); // Set the wishlist count
-    }, [wishlist]); // Update count when wishlist changes
+        setWishlistCount(wishlist.length); 
+    }, [wishlist]); 
 
     useEffect(() => {
-        setCartCount(cart.length); // Set the wishlist count
-    }, [cart]);
+        setCartCount(cart.length);  
+      }, [cart]);
+
+      useEffect(() => {
+        const storedCart = JSON.parse(localStorage.getItem('cart')) || [];
+        setCartCount(storedCart.length);  
+      }, [cart]);  
+
+      useEffect(() => {
+        const userId = JSON.parse(localStorage.getItem('user'))?.userId;  
+        if (userId) {
+          useCartStore.getState().fetchCart(userId); 
+        }
+      }, []); 
+      
+      
 
     const navElements = [
         { title: "NEW", href: "/products/new" },
@@ -44,7 +59,7 @@ const Header = () => {
 
     const handleSearchProduct = async (keyword) => {
         try {
-            if (keyword && keyword.trim() !== '' && keyword.trim().length > 3) {
+            if (keyword && keyword.trim() !== '' && keyword.trim().length > 2) {
                 const response = await axios.get(`http://localhost:3000/api/search/${keyword}`);
                 setFoundProducts(response.data.data);
             } else {
@@ -63,22 +78,24 @@ const Header = () => {
         }
     }, [keyword]);
 
-    // Update login state and check for user role (Admin) when the component mounts
+    
     useEffect(() => {
         const user = JSON.parse(localStorage.getItem('user'));
         setIsLoggedIn(!!user);
         if (user && user.role === 'Admin') {
-            setIsAdmin(true); // Set admin state if the user role is Admin
+            setIsAdmin(true); 
         }
     }, []);
 
     const handleLogout = () => {
-        localStorage.removeItem('user'); // Remove user data from localStorage
-        localStorage.removeItem('token'); // Remove the token from localStorage if needed
-        setIsLoggedIn(false); // Set login state to false
-        setIsAdmin(false); // Reset admin state
-        navigate('/'); // Redirect to homepage or login page
-    };
+        localStorage.removeItem('user');
+        localStorage.removeItem('cart'); 
+        setIsLoggedIn(false);
+        setIsAdmin(false);
+        setCartCount(0);  
+        navigate('/'); 
+      };
+      
 
     return (
         <div>
@@ -101,7 +118,7 @@ const Header = () => {
                             placeholder='What are you looking for?'
                             className='border border-[#979797] py-[14px] pl-[70px] pr-[300px] rounded-[16px] text-[20px] md:pr-[10px] lg:pr-[200px] xl:pr-[300px] xl:w-[600px]'
                             value={keyword}
-                            onChange={(e) => setKeyword(e.target.value)} // Update keyword on input change
+                            onChange={(e) => setKeyword(e.target.value)} 
                         />
                         {foundProducts.length > 0 && (
                             <div className='absolute top-[50px] left-0 w-full bg-white border border-[#979797] z-10'>

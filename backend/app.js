@@ -3,7 +3,7 @@ import mongoose from 'mongoose';
 import dotenv from 'dotenv';
 import cors from 'cors';
 
-// Import Routes
+
 import productRoutes from './routes/product.routes.js';
 import userRoutes from './routes/user.routes.js';
 import faqRoutes from './routes/faq.routes.js';
@@ -16,7 +16,7 @@ import cartRoutes from './routes/cart.routes.js';
 import wishlistRoutes from './routes/wishlist.routes.js';
 
 
-const server = express();  // `server` olarak adlandırılmış
+const server = express();  
 
 server.use(
   cors({
@@ -28,9 +28,9 @@ server.use(
 
 dotenv.config();
 
-server.use(express.json());  // JSON middleware
+server.use(express.json());  
 
-// Route definitions
+
 server.use('/api/products', productRoutes);
 server.use('/api/users', userRoutes);
 server.use('/api/faqs', faqRoutes);

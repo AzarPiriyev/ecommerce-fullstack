@@ -6,7 +6,7 @@ const Faq = () => {
   const [faqData, setFaqData] = useState([]);
   const [activeIndex, setActiveIndex] = useState(null);
 
-  // Fetch FAQ data from backend
+  
   useEffect(() => {
     const fetchFaqData = async () => {
       try {

@@ -5,15 +5,15 @@ import {
     getUserById,
     updateUser,
     deleteUser
-} from "../controllers/user.controller.js"; // Adjust the path as necessary
+} from "../controllers/user.controller.js"; 
 
 const router = express.Router();
 
 // Routes
-router.post("/", createUser);          // Create a new user
-router.get("/", getUsers);              // Get all users
-router.get("/:id", getUserById);        // Get a user by ID
-router.patch("/:id", updateUser);         // Update a user by ID
-router.delete("/:id", deleteUser);      // Delete a user by ID
+router.post("/", createUser);         
+router.get("/", getUsers);             
+router.get("/:id", getUserById);        
+router.patch("/:id", updateUser);       
+router.delete("/:id", deleteUser);     
 
 export default router;

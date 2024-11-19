@@ -10,7 +10,7 @@ import useCartStore from '../../../store/cart';
 
 const New = () => {
   const [newArrivals, setNewArrivals] = useState([]);
-  const { addToCart } = useCartStore(); // Access the addToCart function
+  const { addToCart } = useCartStore(); 
   const [userId, setUserId] = useState(null);
 
   useEffect(() => {
@@ -86,7 +86,7 @@ const New = () => {
 
   const handleAddToCart = (productId) => {
     if (userId) {
-      const quantity = 1; // Default quantity
+      const quantity = 1; 
       addToCart(userId, productId, quantity);
       alert("Product added to cart!");
     } else {
@@ -123,7 +123,7 @@ const New = () => {
                     <button 
                       className="text-white bg-[#ff5100] py-1 px-3 rounded-lg text-sm font-semibold hover:bg-[#ff7833] transition duration-200"
                       onClick={(e) => {
-                        e.preventDefault(); // Prevent link navigation
+                        e.preventDefault(); 
                         handleAddToCart(product._id);
                       }}
                     >

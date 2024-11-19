@@ -10,18 +10,19 @@ import useWishlistStore from '../../store/wishlist';
 const ProductDetail = () => {
   const { id } = useParams();
   const [product, setProduct] = useState(null);
-  const [categoryName, setCategoryName] = useState(''); // Add category name state
+  const [categoryName, setCategoryName] = useState('');
   const [userId, setUserId] = useState(null);
   const { addToCart } = useCartStore();
-  const { addWishlistItem, removeWishlistItem, wishlist } = useWishlistStore();
+  const { fetchWishlist, addWishlistItem, removeWishlistItem, wishlist } = useWishlistStore();
   const [isInWishlist, setIsInWishlist] = useState(false);
 
   useEffect(() => {
     const user = JSON.parse(localStorage.getItem("user"));
     if (user) {
       setUserId(user._id);
+      fetchWishlist(user._id); 
     }
-  }, []);
+  }, [fetchWishlist]);
 
   useEffect(() => {
     const fetchProduct = async (id) => {
@@ -29,7 +30,6 @@ const ProductDetail = () => {
         const response = await axios.get(`http://localhost:3000/api/products/${id}`);
         setProduct(response.data);
 
-        // Fetch category name based on category ID
         if (response.data.category) {
           const categoryResponse = await axios.get(`http://localhost:3000/api/categories/${response.data.category}`);
           setCategoryName(categoryResponse.data.name);
@@ -45,35 +45,39 @@ const ProductDetail = () => {
   useEffect(() => {
     if (wishlist.some((item) => item.productId === id)) {
       setIsInWishlist(true);
+    } else {
+      setIsInWishlist(false);
     }
   }, [wishlist, id]);
-
-  if (!product) return <p>Yükleniyor...</p>;
 
   const handleAddToCart = () => {
     if (userId) {
       const quantity = 1;
       addToCart(userId, product._id, quantity);
-      alert("Sepete eklendi.");
+      alert("Added to cart.");
     } else {
-      alert("Lütfen giriş yapın.");
+      alert("Please log in.");
     }
   };
 
-  const handleWishlistToggle = () => {
+  const handleWishlistToggle = async () => {
     if (userId) {
       if (isInWishlist) {
-        removeWishlistItem(userId, product._id);
-        alert("Wishlist'ten kaldırıldı.");
+        await removeWishlistItem(userId, product._id);
+        setIsInWishlist(false); 
+        alert("Removed from Wishlist.");
       } else {
-        addWishlistItem(userId, product._id);
-        alert("Wishlist'e eklendi.");
+        await addWishlistItem(userId, product._id);
+        setIsInWishlist(true); 
+        alert("Added to Wishlist.");
       }
-      setIsInWishlist(!isInWishlist);
     } else {
-      alert("Lütfen giriş yapın.");
+      alert("Please log in.");
     }
   };
+  
+
+  if (!product) return <p>Yükleniyor...</p>;
 
   return (
     <Container>
@@ -86,7 +90,7 @@ const ProductDetail = () => {
           <div className='md:px-[30px] md:py-[17px] md:min-w-[350px] lg:min-w-[500px] xl:min-w-[700px]'>
             <h1 className='text-[24px] text-[#2f2f2f] font-bold md:text-[24px] lg:text-[34px]'>{product.name}</h1>
             <p className='text-[14px] font-medium text-[#ff5100] mb-[20px]'>{product.writer}</p>
-            <p className='text-[16px] font-medium text-[#2f2f2f] mb-[30px]'>{categoryName}</p> {/* Display category name */}
+            <p className='text-[16px] font-medium text-[#2f2f2f] mb-[30px]'>{categoryName}</p>
             <div className='mb-[30px] md:flex md:justify-between'>
               <p className='text-[30px] font-semibold text-[#2f2f2f] text-center mb-[20px]'>${product.price}</p>
               <div>
@@ -97,7 +101,6 @@ const ProductDetail = () => {
                   <GrBasket className='text-white mt-[3px]' />
                   <p className='text-5 font-bold text-white'>Add to Cart</p>
                 </button>
-                <p className='text-[16px] font-bold text-[#2e2e2e] text-center'>Available in {product.availability}</p>
               </div>
             </div>
             <div className='flex gap-[10px]'>

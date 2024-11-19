@@ -1,7 +1,7 @@
 import Wishlist from "../models/wishlist.model.js";
 import Product from "../models/product.model.js";
 
-// Kullanıcının wishlist'ini getir
+
 export const getUserWishlist = async (req, res) => {
   try {
     const { userId } = req.params;
@@ -34,7 +34,7 @@ export const getUserWishlist = async (req, res) => {
   }
 };
 
-// Wishlist'e ürün ekle
+
 export const addToWishlist = async (req, res) => {
   try {
     const { userId, productId } = req.body;
@@ -70,7 +70,7 @@ export const addToWishlist = async (req, res) => {
   }
 };
 
-// Wishlist'teki bir ürünü kaldır
+
 export const removeFromWishlist = async (req, res) => {
   try {
     const { userId, productId } = req.params;
@@ -93,7 +93,7 @@ export const removeFromWishlist = async (req, res) => {
   }
 };
 
-// Kullanıcının wishlist'ini temizle
+
 export const clearWishlist = async (req, res) => {
   try {
     const { userId } = req.params;

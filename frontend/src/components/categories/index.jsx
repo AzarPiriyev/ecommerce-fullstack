@@ -38,7 +38,7 @@ const Categories = () => {
         {categories.map((category, index) => (
           <div key={index} className="bg-white shadow-md rounded-lg overflow-hidden transform hover:scale-105 transition-transform duration-300">
             <img
-              src={category.imageUrl} // Adjust the image source based on your API response
+              src={category.imageUrl} 
               alt={category.name}
               className="h-40 w-full object-cover"
             />

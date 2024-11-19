@@ -1,6 +1,6 @@
 import Inform from '../models/inform.model.js';
 
-// Create a new Inform
+
 export const createInform = async (req, res) => {
   const { title, description, content, code } = req.body;
 
@@ -12,7 +12,7 @@ export const createInform = async (req, res) => {
   }
 };
 
-// Get all Informs
+
 export const getAllInforms = async (req, res) => {
   try {
     const informs = await Inform.find();
@@ -22,7 +22,7 @@ export const getAllInforms = async (req, res) => {
   }
 };
 
-// Get a single Inform by ID
+
 export const getInformById = async (req, res) => {
   try {
     const inform = await Inform.findById(req.params.id);
@@ -35,7 +35,7 @@ export const getInformById = async (req, res) => {
   }
 };
 
-// Update an Inform
+
 export const updateInform = async (req, res) => {
   try {
     const updatedInform = await Inform.findByIdAndUpdate(req.params.id, req.body, { new: true });
@@ -48,7 +48,7 @@ export const updateInform = async (req, res) => {
   }
 };
 
-// Delete an Inform
+
 export const deleteInform = async (req, res) => {
   try {
     const deletedInform = await Inform.findByIdAndDelete(req.params.id);

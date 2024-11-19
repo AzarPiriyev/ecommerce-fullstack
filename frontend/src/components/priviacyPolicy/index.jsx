@@ -12,7 +12,7 @@ const PriviacyPolicy = () => {
         const response = await fetch('http://localhost:3000/api/informs');
         const data = await response.json();
         
-        // Filter data for items with code "Privacy Policy"
+        
         const privacyPolicyItems = data.filter(item => item.code === "Privacy Policy");
         setPriviacyData(privacyPolicyItems);
       } catch (error) {

@@ -11,7 +11,7 @@ const ContactComp = () => {
         if (!response.ok) throw new Error('Failed to fetch contact information');
 
         const data = await response.json();
-        setContactInfo(data[0]); // Only use the first entry
+        setContactInfo(data[0]); 
       } catch (error) {
         console.error('Error fetching contact information:', error);
       }

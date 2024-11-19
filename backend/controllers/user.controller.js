@@ -1,6 +1,6 @@
 import { User } from "../models/user.model.js";
 
-// Create a new user
+
 export const createUser = async (req, res) => {
     try {
         const { fullName, email, password, role } = req.body;
@@ -8,7 +8,7 @@ export const createUser = async (req, res) => {
         const newUser = new User({
             fullName,
             email,
-            password, // Make sure to hash the password before saving
+            password, 
             role,
         });
 
@@ -19,7 +19,7 @@ export const createUser = async (req, res) => {
     }
 };
 
-// Get all users
+
 export const getUsers = async (req, res) => {
     try {
         const users = await User.find();
@@ -29,7 +29,7 @@ export const getUsers = async (req, res) => {
     }
 };
 
-// Get a user by ID
+
 export const getUserById = async (req, res) => {
     const { id } = req.params;
     try {
@@ -43,7 +43,7 @@ export const getUserById = async (req, res) => {
     }
 };
 
-// Update a user
+
 export const updateUser = async (req, res) => {
     const { id } = req.params;
     try {
@@ -57,7 +57,7 @@ export const updateUser = async (req, res) => {
     }
 };
 
-// Delete a user
+
 export const deleteUser = async (req, res) => {
     const { id } = req.params;
     try {

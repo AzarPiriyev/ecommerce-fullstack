@@ -1,6 +1,6 @@
 import Faq from '../models/faq.model.js';
 
-// Tüm FAQ'ları getirme
+
 export const getFaqs = async (req, res) => {
   try {
     const faqs = await Faq.find();
@@ -10,7 +10,7 @@ export const getFaqs = async (req, res) => {
   }
 };
 
-// Tek bir FAQ'ı getirme (ID ile)
+
 export const getFaqById = async (req, res) => {
   try {
     const faq = await Faq.findById(req.params.id);
@@ -23,7 +23,7 @@ export const getFaqById = async (req, res) => {
   }
 };
 
-// Yeni FAQ ekleme
+
 export const createFaq = async (req, res) => {
   const { title, description } = req.body;
 
@@ -40,7 +40,7 @@ export const createFaq = async (req, res) => {
   }
 };
 
-// FAQ güncelleme
+
 export const updateFaq = async (req, res) => {
   try {
     const updatedFaq = await Faq.findByIdAndUpdate(req.params.id, req.body, { new: true });
@@ -53,7 +53,7 @@ export const updateFaq = async (req, res) => {
   }
 };
 
-// FAQ silme
+
 export const deleteFaq = async (req, res) => {
   try {
     const deletedFaq = await Faq.findByIdAndDelete(req.params.id);

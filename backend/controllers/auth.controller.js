@@ -2,9 +2,9 @@ import bcrypt from "bcryptjs";
 import jwt from "jsonwebtoken";
 import { User } from "../models/user.model.js";
 
-const JWT_SECRET = "your_jwt_secret_key"; // Bu anahtarı güvende tutun
+const JWT_SECRET = "your_jwt_secret_key"; 
 
-// Kayıt İşlemi (signUp)
+
 export const signUp = async (req, res) => {
     const { fullName, email, password } = req.body;
 
@@ -26,7 +26,7 @@ export const signUp = async (req, res) => {
     }
 };
 
-// Giriş İşlemi (signIn)
+
 export const signIn = async (req, res) => {
     const { email, password } = req.body;
 
@@ -48,10 +48,10 @@ export const signIn = async (req, res) => {
     }
 };
 
-// Çıkış İşlemi (logOut)
+
 export const logOut = async (req, res) => {
     try {
-        // Çıkış işlemi için istemcide token'i silinmesi yeterlidir
+        
         res.status(200).json({ message: "Başarıyla çıkış yapıldı." });
     } catch (error) {
         res.status(500).json({ message: "Çıkış işleminde hata oluştu." });

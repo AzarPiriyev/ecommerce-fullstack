@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { RiDeleteBin6Line } from "react-icons/ri";
 import { FaMinus, FaPlus } from "react-icons/fa";
 import useCartStore from '../../../store/cart';
-import Total from '../total'; // Total bileşenini içe aktarın
+import Total from '../total'; 
 
 const Basket = () => {
     const { fetchCart, cart = [], updateCartItemQty, removeCartItem } = useCartStore();
@@ -26,7 +26,7 @@ const Basket = () => {
         updateCartItemQty(userId, productId, quantity);
     };
 
-    // Toplam fiyatı hesaplayan fonksiyon
+    
     const calculateTotalPrice = () => {
         return cart.reduce((total, item) => total + item.price * item.quantity, 0);
     };
@@ -67,7 +67,7 @@ const Basket = () => {
             ))}
             </div>
             <div>
-            {/* Total bileşenine totalPrice prop'u ile gönderilir */}
+            
             <Total totalPrice={calculateTotalPrice()} />
             </div>
             </div>

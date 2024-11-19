@@ -1,6 +1,6 @@
 import React from 'react';
 
-const Total = ({ totalPrice = 0 }) => {  // totalPrice varsayılan olarak 0
+const Total = ({ totalPrice = 0 }) => {  
   return (
     <div className="fixed bottom-0 left-0 right-0 bg-white shadow-lg p-4 md:static md:shadow-none md:bg-transparent lg:min-w-[220px] lg:mt-[30px]"
       style={{ zIndex: 1000 }}>

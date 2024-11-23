@@ -116,7 +116,7 @@ const Header = () => {
                         <input
                             type="text"
                             placeholder='What are you looking for?'
-                            className='border border-[#979797] py-[14px] pl-[70px] pr-[300px] rounded-[16px] text-[20px] md:pr-[10px] lg:pr-[200px] xl:pr-[300px] xl:w-[600px]'
+                            className='border border-[#979797] py-[14px] pl-[70px] pr-[300px] rounded-[16px] text-[20px] md:pr-[10px] lg:pr-[160px] xl:pr-[250px] xl:w-[550px]'
                             value={keyword}
                             onChange={(e) => setKeyword(e.target.value)} 
                         />
@@ -193,7 +193,7 @@ const Header = () => {
 
                 {/* Desktop Navigation */}
                 <div className='px-[200px] py-[12px] hidden md:block'>
-                    <ul className='flex justify-between text-[#979797] text-[18px] font-medium'>
+                    <ul className='flex justify-between min-w-[300px] text-[#979797] text-[18px] font-medium'>
                         {navElements.map((link, index) => (
                             <li key={index}>
                                 <a href={link.href}>{link.title}</a>
@@ -208,7 +208,7 @@ const Header = () => {
                             <div className="flex justify-between items-center mb-4">
                                 <h2 className="text-[20px] font-semibold text-gray-700">Menu</h2>
                                 <button onClick={() => setIsSidebarOpen(false)} className="text-2xl text-gray-500">
-                                    <AiOutlineClose /> {/* X butonu */}
+                                    <AiOutlineClose /> 
                                 </button>
                             </div>
                             <ul className="space-y-4">
@@ -231,7 +231,7 @@ const Header = () => {
                         placeholder='What are you looking for?'
                         className='border border-[#979797] py-[10px] pl-[40px] pr-[110px] w-full rounded-[16px] text-[18px]'
                         value={keyword}
-                        onChange={(e) => setKeyword(e.target.value)} // Update keyword on input change
+                        onChange={(e) => setKeyword(e.target.value)} 
                     />
                     {foundProducts.length > 0 && (
                         <div className='absolute top-[50px] left-0 w-full bg-white border border-[#979797] z-10'>

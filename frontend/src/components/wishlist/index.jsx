@@ -66,16 +66,19 @@ const Wishlist = () => {
                 <p className="text-lg text-gray-800 font-medium mb-3">${item.price}</p>
               </Link>
 
+              <div className='flex items-center justify-between'>
               <button 
-                className="flex items-center gap-2 text-orange-500 font-bold hover:text-orange-600"
+                className="text-white bg-[#ff5100] py-1 px-3 rounded-lg text-sm font-semibold hover:bg-[#ff7833] transition duration-200 overflow-hidden whitespace-nowrap text-ellipsis"
                 onClick={(e) => {
                   e.preventDefault();
                   handleAddToCart(item.productId); 
                 }}
               >
                 <span>Add to Cart</span>
-                <GrBasket />
+                
               </button>
+              <GrBasket className='text-[#ff5100] text-xl'/>
+              </div>
             </div>
           ))}
         </div>

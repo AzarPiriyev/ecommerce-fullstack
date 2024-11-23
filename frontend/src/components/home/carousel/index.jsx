@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { IoChevronBackOutline, IoChevronForwardOutline } from 'react-icons/io5';
 import Container from '../../common/container';
+import { Link } from 'react-router-dom';
 
 const Carousel = () => {
   const [currentIndex, setCurrentIndex] = useState(0);
@@ -35,7 +36,7 @@ const Carousel = () => {
     <Container>
       <div className="relative w-full mt-[20px] mb-[20px]">
         
-        <div className="relative h-56 overflow-hidden rounded-lg md:h-96">
+        <Link to={'/categories'}><div className="relative h-56 overflow-hidden rounded-lg md:h-96">
           {images.map((image, index) => (
             <div
               key={index}
@@ -50,7 +51,7 @@ const Carousel = () => {
               />
             </div>
           ))}
-        </div>
+        </div></Link>
 
        
         <div className="absolute z-30 flex -translate-x-1/2 bottom-5 left-1/2 space-x-3">

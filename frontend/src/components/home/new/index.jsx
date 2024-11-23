@@ -118,6 +118,7 @@ const New = () => {
                     {product.name}
                   </p>
                   <p className="text-sm text-gray-500">{product.author}</p>
+                  <p className="text-sm text-gray-500 overflow-hidden whitespace-nowrap text-ellipsis">{product.writer}</p>
                   <p className="text-md font-semibold text-[#2f2f2f] mb-3">${product.price}</p>
                   <div className="flex items-center justify-between">
                     <button 

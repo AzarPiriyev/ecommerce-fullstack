@@ -22,7 +22,7 @@ const useWishlistStore = create((set) => ({
         wishlist: [...state.wishlist, response.data],
       }));
     } catch (error) {
-      console.error("Wishlist'e ürün eklenemedi:", error.response ? error.response.data : error.message);
+      console.error("Could not add product to Wishlist:", error.response ? error.response.data : error.message);
     }
   },
 
@@ -35,7 +35,7 @@ const useWishlistStore = create((set) => ({
         wishlist: state.wishlist.filter((item) => item.productId !== productId),
       }));
     } catch (error) {
-      console.error("Wishlist'ten ürün kaldırılamadı:", error);
+      console.error("Could not remove item from Wishlist:", error);
     }
   },
 }));

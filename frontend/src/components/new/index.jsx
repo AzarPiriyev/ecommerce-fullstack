@@ -35,7 +35,7 @@ const New = () => {
           ...searchParams
         }
       });
-      setNewProducts(response.data.products); 
+      setNewProducts(response.data.products)
       setTotalPages(response.data.totalPages); 
     } catch (error) {
       console.error('Error fetching new products:', error);

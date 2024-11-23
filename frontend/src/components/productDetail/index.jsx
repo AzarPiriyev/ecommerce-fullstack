@@ -84,7 +84,7 @@ const ProductDetail = () => {
       <div className='mt-[40px] mb-[40px]'>
         <div className='mb-[40px] md:flex'>
           <div className='py-[20px] px-[50px] mb-[20px] flex justify-center md:justify-start'>
-            <img src={product.imageUrl || "/src/assets/images/product.jpeg"} alt={product.name} className='max-w-[260px] max-h-[400px] xl:max-w-[260px] md:max-h-[400px] xl:min-h-[400px]'/>
+            <img src={product.imageUrl || "/src/assets/images/product.jpeg"} alt={product.name} className='border-2 max-w-[260px] max-h-[400px] xl:max-w-[260px] md:max-h-[400px] xl:min-h-[400px]'/>
           </div>
 
           <div className='md:px-[30px] md:py-[17px] md:min-w-[350px] lg:min-w-[500px] xl:min-w-[700px]'>
